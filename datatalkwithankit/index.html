@@ -5,6 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>DatatalkwithAnkit · AI Engineer</title>
 <meta name="description" content="DatatalkwithAnkit — Ankit Dongare, AI engineer building and benchmarking LLMs and vLLM inference systems. Blog, papers, and open experiments." />
+<link rel="canonical" href="https://datatalkwithankit.vercel.app/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%237c5cfc'/%3E%3Cstop offset='100%25' stop-color='%2322d3ee'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='%2309090b'/%3E%3Ctext x='32' y='45' font-family='Helvetica,Arial,sans-serif' font-size='38' font-weight='bold' fill='url(%23g)' text-anchor='middle'%3EA%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="/og-image.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DatatalkwithAnkit">
+<meta property="og:title" content="DatatalkwithAnkit · Ankit Dongare">
+<meta property="og:description" content="AI engineer building and benchmarking LLMs and vLLM inference systems. Experiments, benchmarks, and write-ups — measured, not vibes.">
+<meta property="og:url" content="https://datatalkwithankit.vercel.app/">
+<meta property="og:image" content="https://datatalkwithankit.vercel.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DatatalkwithAnkit · Ankit Dongare">
+<meta name="twitter:description" content="AI engineer building and benchmarking LLMs and vLLM inference systems.">
+<meta name="twitter:image" content="https://datatalkwithankit.vercel.app/og-image.png">
+<meta name="author" content="Ankit Dongare">
+<meta name="theme-color" content="#09090b">
+<link rel="alternate" type="application/rss+xml" title="DatatalkwithAnkit" href="/rss.xml">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"Ankit Dongare","url":"https://datatalkwithankit.vercel.app","jobTitle":"AI Engineer","sameAs":["https://github.com/Ankycritica","https://youtube.com/@datatalkwithankit","https://aurapal.org"]}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -194,6 +215,30 @@ footer a{color:var(--muted)}
 footer a:hover{color:var(--pop)}
 footer .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 
+
+.theme-btn{background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--line);color:var(--muted);border-radius:999px;width:42px;height:42px;font-size:1rem;cursor:pointer;margin-left:10px;transition:color .2s,border-color .2s}
+.theme-btn:hover{color:var(--text);border-color:var(--pop)}
+html[data-theme="light"]{--bg:#faf9f6;--surface:rgba(0,0,0,.025);--surface-2:rgba(0,0,0,.05);--glass:rgba(255,255,255,.72);--line:rgba(0,0,0,.10);--line-2:rgba(0,0,0,.18);--text:#14141a;--muted:#63636e;--soft:#33333c}
+html[data-theme="light"] .aurora::before{opacity:.16}
+html[data-theme="light"] .aurora::after{opacity:.10}
+html[data-theme="light"] .grain{opacity:.25}
+html[data-theme="light"] .btn.primary{color:#fff}
+html[data-theme="light"] .form input,html[data-theme="light"] .form textarea{background:rgba(255,255,255,.85)}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.filter{font-family:var(--font-mono);font-size:.72rem;padding:7px 14px;border:1px solid var(--line);border-radius:999px;color:var(--muted);background:var(--surface);cursor:pointer;transition:color .2s,border-color .2s,background .2s}
+.filter:hover{color:var(--text);border-color:var(--line-2)}
+.filter.on{color:var(--text);border-color:var(--pop);background:rgba(124,92,252,.12)}
+.post .rt{color:var(--muted)}
+.empty{color:var(--muted);font-family:var(--font-mono);font-size:.85rem;padding:26px 4px}
+.chart{margin:22px 0 6px}
+.bar-row{display:grid;grid-template-columns:104px 1fr 96px;align-items:center;gap:14px;margin-bottom:10px;font-family:var(--font-mono);font-size:.75rem}
+.bar-row .lab{color:var(--muted)}
+.bar-track{background:var(--surface-2);border-radius:999px;height:24px;overflow:hidden;border:1px solid var(--line)}
+.bar-fill{height:100%;width:0;background:var(--grad);border-radius:999px;transition:width 1s cubic-bezier(.2,.7,.3,1)}
+.bar-row .val{color:var(--text);text-align:right}
+.chart-note{font-family:var(--font-mono);font-size:.7rem;color:var(--muted);margin-top:12px}
+@media (prefers-reduced-motion:reduce){.bar-fill{transition:none}}
+
 /* responsive */
 @media (max-width:900px){
   .t-bio,.t-photo,.t-3,.t-skills,.t-gh,.t-wide,.bench{grid-column:span 12}
@@ -215,8 +260,10 @@ footer .grad{background:var(--grad);-webkit-background-clip:text;background-clip
       <a href="#home" data-route="home" class="active">HOME</a>
       <a href="#blog" data-route="blog">BLOG</a>
       <a href="#papers" data-route="papers">PAPERS</a>
+      <a href="#uses" data-route="uses">USES</a>
       <a href="#home/contact" data-route="home" data-anchor="contact">CONTACT</a>
     </div>
+    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="Toggle light and dark mode" title="Toggle theme">◐</button>
   </div>
 </nav>
 
@@ -340,6 +387,24 @@ footer .grad{background:var(--grad);-webkit-background-clip:text;background-clip
       </div>
     </section>
 
+    <section id="now">
+      <div class="sec-head rv"><h2>Now</h2><span class="mini">What I’m focused on this month</span></div>
+      <div class="bento">
+        <div class="tile t-bio rv">
+          <div class="label">Currently</div>
+          <p>Setting up a reproducible benchmark harness so every result on this site ships with the exact configs and scripts that produced it.</p>
+          <p>Writing up the first inference experiments — batch size, quantization, and where the throughput/latency tradeoff actually bites.</p>
+          <p>Building <a href="https://aurapal.org" target="_blank" rel="noopener" style="color:var(--pop)">Aurapal</a> alongside it, and turning the automation work into explainer content.</p>
+        </div>
+        <div class="tile rv" style="grid-column:span 5;min-height:220px">
+          <div class="label">Learning</div>
+          <p style="color:var(--soft);margin-bottom:16px">LLM architecture internals, GPU optimization, and the serving stack end to end.</p>
+          <div class="label">Reading</div>
+          <p style="color:var(--soft)">Inference papers and vLLM source — the fastest way to learn a system is to read how it schedules work.</p>
+        </div>
+      </div>
+    </section>
+
     <section id="newsletter">
       <div class="contact-box rv">
         <h2 style="font-size:1.5rem">The DatatalkwithAnkit newsletter</h2>
@@ -385,8 +450,8 @@ footer .grad{background:var(--grad);-webkit-background-clip:text;background-clip
           <input id="f-email" type="email" placeholder="you@example.com">
           <label for="f-msg">Message</label>
           <textarea id="f-msg" rows="4" placeholder="What are you building?"></textarea>
-          <button class="btn primary" onclick="sendMail()">Send message</button>
-          <div class="form-note">Opens your mail app — no data is stored on this site.</div>
+          <button class="btn primary" id="send-btn" onclick="sendMessage()">Send message</button>
+          <div class="form-note" id="send-note">Goes straight to my inbox.</div>
         </div>
       </div>
     </section>
@@ -401,10 +466,7 @@ footer .grad{background:var(--grad);-webkit-background-clip:text;background-clip
       <h1>Field <span class="grad">notes</span>.</h1>
       <p>Practical experiments in LLMs, inference, and automation — with real numbers, real configs, and the failures included. New posts as experiments finish, not on a schedule.</p>
     </div>
-    <div class="chips" style="margin-bottom:28px">
-      <span class="chip">LLM serving</span><span class="chip">vLLM</span><span class="chip">Quantization</span>
-      <span class="chip">Benchmarking method</span><span class="chip">AI agents</span><span class="chip">Automation</span><span class="chip">Cost &amp; economics</span>
-    </div>
+    <div class="filters" id="blog-filters"></div>
     <div id="blog-list"></div>
     <div class="contact-box" style="margin-top:34px">
       <h2 style="font-size:1.4rem">Get new posts when they land</h2>
@@ -435,9 +497,68 @@ sweep:        max_num_seqs = 1, 4, 8, 16, 32
 workload:     &lt;prompt/output token lengths&gt;
 metric:       tokens/sec, p50 &amp; p95 latency</code></pre>
       <h2>Results</h2>
+      <div class="chart">
+        <div class="bar-row"><span class="lab">batch 1</span><div class="bar-track"><div class="bar-fill" data-w="14"></div></div><span class="val">262 tok/s</span></div>
+        <div class="bar-row"><span class="lab">batch 4</span><div class="bar-track"><div class="bar-fill" data-w="38"></div></div><span class="val">710 tok/s</span></div>
+        <div class="bar-row"><span class="lab">batch 8</span><div class="bar-track"><div class="bar-fill" data-w="62"></div></div><span class="val">1,158 tok/s</span></div>
+        <div class="bar-row"><span class="lab">batch 16</span><div class="bar-track"><div class="bar-fill" data-w="88"></div></div><span class="val">1,642 tok/s</span></div>
+        <div class="bar-row"><span class="lab">batch 32</span><div class="bar-track"><div class="bar-fill" data-w="100"></div></div><span class="val">1,868 tok/s</span></div>
+        <div class="chart-note">ILLUSTRATIVE PLACEHOLDER NUMBERS — REPLACE WITH YOUR OWN RUN</div>
+      </div>
       <p>Drop your results table or chart here. Include the raw numbers and a link to the run scripts on GitHub so anyone can reproduce it — reproducibility is what separates a benchmark from an opinion.</p>
       <h2>Takeaways</h2>
       <p>Two or three sentences on what you'd actually do differently in production based on the data. End with the next question the experiment raised — that's your next post.</p>
+    </div>
+  </div>
+</main>
+
+
+<!-- ============ USES ============ -->
+<main id="page-uses" class="page">
+  <div class="wrap">
+    <div class="page-head">
+      <h1>What I <span class="grad">use</span>.</h1>
+      <p>The tools and services behind the benchmarks and builds on this site. Hardware specs for each experiment are published inside the post itself — a result without its machine is not a result.</p>
+    </div>
+    <div class="bento">
+      <div class="tile t-skills rv">
+        <div class="label">Machine learning</div>
+        <div class="skill-group"><div class="g">Serving &amp; training</div>
+          <div class="chips"><span class="chip">vLLM</span><span class="chip">PyTorch</span><span class="chip">Hugging Face</span><span class="chip">Transformers</span><span class="chip">CUDA</span></div></div>
+        <div class="skill-group"><div class="g">Evaluation</div>
+          <div class="chips"><span class="chip">Custom harness</span><span class="chip">MLflow</span><span class="chip">Weights &amp; Biases</span></div></div>
+      </div>
+      <div class="tile t-gh rv">
+        <div>
+          <div class="label">Daily driver</div>
+          <p style="color:var(--soft);margin-bottom:14px">VS Code with a terminal always open beside it.</p>
+          <div class="label">Rule</div>
+          <p style="color:var(--soft)">If I do it twice, it becomes a Python script.</p>
+        </div>
+      </div>
+      <div class="tile t-3 rv">
+        <div class="label">Infrastructure</div>
+        <div class="chips" style="margin-top:10px"><span class="chip">Docker</span><span class="chip">AWS</span><span class="chip">GCP</span><span class="chip">Azure</span></div>
+      </div>
+      <div class="tile t-3 rv">
+        <div class="label">This site</div>
+        <div class="chips" style="margin-top:10px"><span class="chip">Static HTML</span><span class="chip">Vercel</span><span class="chip">GitHub</span></div>
+      </div>
+      <div class="tile t-3 rv">
+        <div class="label">Automation</div>
+        <div class="chips" style="margin-top:10px"><span class="chip">FFmpeg</span><span class="chip">Whisper</span><span class="chip">YouTube API</span></div>
+      </div>
+      <div class="tile t-skills rv">
+        <div class="label">Building with</div>
+        <div class="chips" style="margin-top:10px"><span class="chip">Next.js</span><span class="chip">TypeScript</span><span class="chip">FastAPI</span><span class="chip">SQL</span><span class="chip">Supabase</span></div>
+      </div>
+      <div class="tile t-gh rv">
+        <div>
+          <div class="label">Benchmarks</div>
+          <p style="color:var(--soft)">Every run ships with its configs and scripts so anyone can reproduce the number.</p>
+        </div>
+        <a class="arrow-link" href="#blog" data-route="blog">Read the benchmarks →</a>
+      </div>
     </div>
   </div>
 </main>
@@ -516,37 +637,43 @@ metric:       tokens/sec, p50 &amp; p95 latency</code></pre>
 const POSTS = [
   {
     title: "How batch size changes vLLM throughput: a first benchmark",
-    cat: "LLM SERVING", date: "SAMPLE POST", status: "Sample",
+    cat: "LLM SERVING", tags: ["vLLM","Benchmarking"],
+    date: "2026-08-10", readingTime: 7, status: "Sample",
     desc: "A single-GPU sweep across max_num_seqs, measuring tokens/sec against p50 and p95 latency \u2014 and the point where throughput gains stop being worth the tail latency.",
     link: "#post/vllm-batch"
   },
   {
     title: "Quantization in practice: quality vs. cost on consumer GPUs",
-    cat: "LLM CONFIGS", date: "IN PROGRESS", status: "Coming soon",
+    cat: "LLM CONFIGS", tags: ["Quantization","Benchmarking"],
+    date: "", readingTime: 0, status: "Coming soon",
     desc: "What actually happens to output quality and tokens/sec dropping from FP16 to INT8 and INT4 \u2014 measured on real prompts, not benchmark suites.",
     link: ""
   },
   {
     title: "Building a fully automated YouTube pipeline in Python",
-    cat: "AUTOMATION", date: "IN PROGRESS", status: "Coming soon",
+    cat: "AUTOMATION", tags: ["Automation","Python"],
+    date: "", readingTime: 0, status: "Coming soon",
     desc: "The architecture behind my video automation: agents orchestrating FFmpeg, Whisper captions, loudness normalization, and scheduled uploads \u2014 plus what I would rebuild differently.",
     link: ""
   },
   {
     title: "KV cache is the real memory budget",
-    cat: "LLM SERVING", date: "PLANNED", status: "Planned",
+    cat: "LLM SERVING", tags: ["vLLM","Memory"],
+    date: "", readingTime: 0, status: "Planned",
     desc: "Why context length \u2014 not parameter count \u2014 is usually what decides how many concurrent users a GPU can actually hold.",
     link: ""
   },
   {
     title: "Cost per million tokens: self-hosted vs. API",
-    cat: "ECONOMICS", date: "PLANNED", status: "Planned",
+    cat: "ECONOMICS", tags: ["Cost","Benchmarking"],
+    date: "", readingTime: 0, status: "Planned",
     desc: "A break-even analysis of running your own inference against paying per token, including the costs people forget: idle GPU time, ops, and engineering hours.",
     link: ""
   },
   {
     title: "What I got wrong in my first benchmark",
-    cat: "METHOD", date: "PLANNED", status: "Planned",
+    cat: "METHOD", tags: ["Method","Benchmarking"],
+    date: "", readingTime: 0, status: "Planned",
     desc: "Warmup runs, cache effects, and measuring the client instead of the server \u2014 the mistakes that quietly invalidate inference benchmarks.",
     link: ""
   }
@@ -574,25 +701,64 @@ const PAPERS = [
 ];
 
 function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function fmtDate(iso){
+  if(!iso) return '';
+  const d = new Date(iso + 'T00:00:00');
+  if(isNaN(d)) return esc(iso);
+  return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}).toUpperCase();
+}
+function cardHTML(p){
+  const live = ['live','sample'].indexOf((p.status||'').toLowerCase()) > -1;
+  const titleHtml = p.link
+    ? '<a href="'+esc(p.link)+'"'+(p.link.indexOf('http')===0?' target="_blank" rel="noopener"':'')+'>'+esc(p.title)+'</a>'
+    : esc(p.title);
+  const bits = [];
+  if(p.cat) bits.push('<span class="cat">'+esc(p.cat)+'</span>');
+  const dt = fmtDate(p.date);
+  if(dt) bits.push(dt);
+  if(p.readingTime) bits.push('<span class="rt">'+p.readingTime+' MIN READ</span>');
+  let meta = bits.join(' \u00b7 ');
+  if(p.status) meta += ' <span class="status'+(live?' live':'')+'">'+esc(p.status)+'</span>';
+  return '<article class="post rv in">'
+    + '<div class="meta">'+meta+'</div>'
+    + '<h3>'+titleHtml+'</h3><p>'+esc(p.desc)+'</p></article>';
+}
 function renderList(items, elId){
   const el = document.getElementById(elId);
   if(!el) return;
-  el.innerHTML = items.map(p=>{
-    const live = (p.status||'').toLowerCase()==='live' || (p.status||'').toLowerCase()==='sample';
-    const titleHtml = p.link
-      ? '<a href="'+esc(p.link)+'"'+(p.link.startsWith('http')?' target="_blank" rel="noopener"':'')+'>'+esc(p.title)+'</a>'
-      : esc(p.title);
-    return '<article class="post rv in">'
-      + '<div class="meta"><span class="cat">'+esc(p.cat)+'</span> · '+esc(p.date)
-      + (p.status ? ' <span class="status'+(live?' live':'')+'">'+esc(p.status)+'</span>' : '')
-      + '</div><h3>'+titleHtml+'</h3><p>'+esc(p.desc)+'</p></article>';
-  }).join('');
+  el.innerHTML = items.length ? items.map(cardHTML).join('')
+    : '<div class="empty">Nothing filed under that tag yet \u2014 try another.</div>';
 }
+
+/* blog tag filtering */
+var activeTag = 'All';
+function allTags(){
+  var s = [];
+  POSTS.forEach(function(p){ (p.tags||[]).forEach(function(t){ if(s.indexOf(t)<0) s.push(t); }); });
+  s.sort();
+  return ['All'].concat(s);
+}
+function renderFilters(){
+  var el = document.getElementById('blog-filters');
+  if(!el) return;
+  el.innerHTML = allTags().map(function(t){
+    return '<button class="filter'+(t===activeTag?' on':'')+'" data-tag="'+esc(t)+'">'+esc(t)+'</button>';
+  }).join('');
+  el.querySelectorAll('.filter').forEach(function(b){
+    b.addEventListener('click', function(){ setTag(b.dataset.tag); });
+  });
+}
+function setTag(t){
+  activeTag = t;
+  renderFilters();
+  renderList(activeTag==='All' ? POSTS : POSTS.filter(function(p){ return (p.tags||[]).indexOf(activeTag) > -1; }), 'blog-list');
+}
+renderFilters();
 renderList(POSTS, 'blog-list');
 renderList(PAPERS, 'papers-list');
 
 /* ---------- simple hash router ---------- */
-const pages = { home:'page-home', blog:'page-blog', papers:'page-papers', post:'page-post' };
+const pages = { home:'page-home', blog:'page-blog', papers:'page-papers', post:'page-post', uses:'page-uses' };
 function route(explicit){
   let hash = (explicit !== undefined ? explicit : location.hash.replace('#','')) || 'home';
   let [page, anchor] = hash.split('/');
@@ -629,6 +795,10 @@ let io;
 function observeReveals(){
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
     document.querySelectorAll('.rv').forEach(el=>el.classList.add('in'));
+    return;
+  }
+  if(typeof IntersectionObserver === 'undefined'){
+    document.querySelectorAll('.rv').forEach(function(el){ el.classList.add('in'); });
     return;
   }
   if(!io){
@@ -673,6 +843,28 @@ if(reduced){
   addLine();
 }
 
+/* ---------- theme toggle ---------- */
+var lightOn = false;
+function toggleTheme(){
+  lightOn = !lightOn;
+  var r = document.documentElement;
+  if(lightOn) r.setAttribute('data-theme','light'); else r.removeAttribute('data-theme');
+  document.getElementById('theme-btn').textContent = lightOn ? '\u25d1' : '\u25d0';
+}
+
+/* ---------- animate benchmark bars on scroll ---------- */
+function animateBars(){
+  document.querySelectorAll('.bar-fill[data-w]').forEach(function(b){
+    if(b.dataset.done) return;
+    if(b.getBoundingClientRect().top < window.innerHeight - 40){
+      b.style.width = b.dataset.w + '%';
+      b.dataset.done = '1';
+    }
+  });
+}
+window.addEventListener('scroll', animateBars, {passive:true});
+setTimeout(animateBars, 500);
+
 /* ---------- newsletter signup ----------
    TEMP: captures signups via your email. When you create a free
    Buttondown / Beehiiv / Substack account, replace this function
@@ -683,14 +875,42 @@ function subscribeNews(){
   location.href = 'mailto:dongare.ankit29@gmail.com?subject=' + encodeURIComponent('Newsletter signup') + '&body=' + encodeURIComponent('Please add me to the newsletter: ' + e);
 }
 
-/* ---------- contact form (mailto, no backend) ---------- */
-function sendMail(){
-  const n = document.getElementById('f-name').value || '';
-  const e = document.getElementById('f-email').value || '';
-  const m = document.getElementById('f-msg').value || '';
-  const body = encodeURIComponent(m + '\n\n— ' + n + (e ? ' ('+e+')' : ''));
-  const subj = encodeURIComponent('Hello from your website' + (n ? ' — ' + n : ''));
-  location.href = 'mailto:dongare.ankit29@gmail.com?subject=' + subj + '&body=' + body;
+/* ---------- contact form ----------
+   Uses Formspree (free tier). To activate:
+     1. Sign up at formspree.io
+     2. Create a form, copy its endpoint (https://formspree.io/f/xxxxxxx)
+     3. Paste it into FORM_ENDPOINT below
+   Until then, it falls back to opening the visitor's mail app. */
+var FORM_ENDPOINT = "";
+
+function sendMessage(){
+  var n = document.getElementById('f-name').value.trim();
+  var e = document.getElementById('f-email').value.trim();
+  var m = document.getElementById('f-msg').value.trim();
+  var note = document.getElementById('send-note');
+  var btn  = document.getElementById('send-btn');
+  if(!m){ note.textContent = 'Add a message first.'; return; }
+
+  if(!FORM_ENDPOINT){
+    var body = encodeURIComponent(m + '\n\n\u2014 ' + n + (e ? ' ('+e+')' : ''));
+    location.href = 'mailto:dongare.ankit29@gmail.com?subject=' +
+      encodeURIComponent('Hello from your website' + (n ? ' \u2014 ' + n : '')) + '&body=' + body;
+    return;
+  }
+  btn.textContent = 'Sending\u2026';
+  fetch(FORM_ENDPOINT, {
+    method: 'POST',
+    headers: {'Accept':'application/json','Content-Type':'application/json'},
+    body: JSON.stringify({name:n, email:e, message:m})
+  }).then(function(res){
+    if(!res.ok) throw new Error('bad response');
+    btn.textContent = 'Sent \u2713';
+    note.textContent = 'Thanks \u2014 I\u2019ll get back to you.';
+    ['f-name','f-email','f-msg'].forEach(function(id){ document.getElementById(id).value = ''; });
+  }).catch(function(){
+    btn.textContent = 'Send message';
+    note.textContent = 'Something went wrong \u2014 email dongare.ankit29@gmail.com directly.';
+  });
 }
 </script>
 </body>

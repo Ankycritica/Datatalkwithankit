@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>DatatalkwithAnkit</title>
+    <link>https://datatalkwithankit.vercel.app</link>
+    <description>LLM experiments, vLLM benchmarks, AI agents, and automation — by Ankit Dongare.</description>
+    <language>en-us</language>
+    <atom:link href="https://datatalkwithankit.vercel.app/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>How batch size changes vLLM throughput: a first benchmark</title>
+      <link>https://datatalkwithankit.vercel.app/#post/vllm-batch</link>
+      <guid>https://datatalkwithankit.vercel.app/#post/vllm-batch</guid>
+      <description>A single-GPU sweep across max_num_seqs, measuring tokens/sec against p50 and p95 latency.</description>
+      <pubDate>Mon, 10 Aug 2026 09:00:00 GMT</pubDate>
+    </item>
+  </channel>
+</rss>
