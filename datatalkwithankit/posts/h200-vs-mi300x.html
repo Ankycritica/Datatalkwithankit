@@ -6,30 +6,30 @@
 <title>H200 vs MI300X: what you're actually paying for · DatatalkwithAnkit</title>
 <meta name="description" content="Memory, interconnect, and price compared across NVIDIA H200 and AMD MI300X: what the extra 51 GB buys, why PCIe vs NVLink decides multi-GPU scaling, and what a GPU-hour really costs on the neoclouds.">
 <meta name="author" content="Ankit Dongare">
-<link rel="canonical" href="https://datatalkwithankit.vercel.app/posts/h200-vs-mi300x">
+<link rel="canonical" href="https://datatalkwithankit.com/posts/h200-vs-mi300x">
 <meta name="theme-color" content="#0C0B14">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="/og-image.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="alternate" type="application/rss+xml" title="DatatalkwithAnkit" href="/rss.xml">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="DatatalkwithAnkit">
 <meta property="og:title" content="H200 vs MI300X: what you're actually paying for · DatatalkwithAnkit">
 <meta property="og:description" content="Memory, interconnect, and price compared across NVIDIA H200 and AMD MI300X: what the extra 51 GB buys, why PCIe vs NVLink decides multi-GPU scaling, and what a GPU-hour really costs on the neoclouds.">
-<meta property="og:url" content="https://datatalkwithankit.vercel.app/posts/h200-vs-mi300x">
-<meta property="og:image" content="https://datatalkwithankit.vercel.app/og-h200-vs-mi300x.png">
+<meta property="og:url" content="https://datatalkwithankit.com/posts/h200-vs-mi300x">
+<meta property="og:image" content="https://datatalkwithankit.com/og-h200-vs-mi300x.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="H200 vs MI300X: what you're actually paying for · DatatalkwithAnkit">
 <meta name="twitter:description" content="Memory, interconnect, and price compared across NVIDIA H200 and AMD MI300X: what the extra 51 GB buys, why PCIe vs NVLink decides multi-GPU scaling, and what a GPU-hour really costs on the neoclouds.">
-<meta name="twitter:image" content="https://datatalkwithankit.vercel.app/og-h200-vs-mi300x.png">
+<meta name="twitter:image" content="https://datatalkwithankit.com/og-h200-vs-mi300x.png">
 <script>try{if(localStorage.getItem('theme')==='light')document.documentElement.setAttribute('data-theme','light')}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
 <link rel="stylesheet" href="/style.css">
 <script defer src="/_vercel/insights/script.js"></script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "H200 vs MI300X: what you're actually paying for", "description": "Memory, interconnect, and price compared across NVIDIA H200 and AMD MI300X: what the extra 51 GB buys, why PCIe vs NVLink decides multi-GPU scaling, and what a GPU-hour really costs on the neoclouds.", "datePublished": "2026-08-21", "dateModified": "2026-10-11", "author": {"@type": "Person", "name": "Ankit Dongare", "url": "https://datatalkwithankit.vercel.app"}, "image": "https://datatalkwithankit.vercel.app/og-h200-vs-mi300x.png", "mainEntityOfPage": "https://datatalkwithankit.vercel.app/posts/h200-vs-mi300x", "keywords": "NVIDIA H200, AMD MI300X, NVLink, PCIe, LLM inference, vLLM, GPU pricing, neocloud, HBM3e, ROCm, KV cache"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "H200 vs MI300X: what you're actually paying for", "description": "Memory, interconnect, and price compared across NVIDIA H200 and AMD MI300X: what the extra 51 GB buys, why PCIe vs NVLink decides multi-GPU scaling, and what a GPU-hour really costs on the neoclouds.", "datePublished": "2026-08-21", "dateModified": "2026-10-11", "author": {"@type": "Person", "name": "Ankit Dongare", "url": "https://datatalkwithankit.com"}, "image": "https://datatalkwithankit.com/og-h200-vs-mi300x.png", "mainEntityOfPage": "https://datatalkwithankit.com/posts/h200-vs-mi300x", "keywords": "NVIDIA H200, AMD MI300X, NVLink, PCIe, LLM inference, vLLM, GPU pricing, neocloud, HBM3e, ROCm, KV cache"}</script>
 <meta name="keywords" content="NVIDIA H200, AMD MI300X, H200 vs MI300X, NVLink vs PCIe, LLM inference, GPU pricing, neocloud, HBM3e, ROCm, KV cache">
 <meta property="article:published_time" content="2026-08-21">
 <meta property="article:author" content="Ankit Dongare">
@@ -138,8 +138,8 @@
   </div>
   <div class="share">
     <span>Share this post</span>
-    <a class="btn" href="https://twitter.com/intent/tweet?text=H200%20vs%20MI300X%3A%20what%20you%27re%20actually%20paying%20for&amp;url=https%3A%2F%2Fdatatalkwithankit.vercel.app%2Fposts%2Fh200-vs-mi300x">Post on X</a>
-    <a class="btn" href="https://news.ycombinator.com/submitlink?u=https%3A%2F%2Fdatatalkwithankit.vercel.app%2Fposts%2Fh200-vs-mi300x&amp;t=H200%20vs%20MI300X%3A%20what%20you%27re%20actually%20paying%20for">Submit to Hacker News</a>
+    <a class="btn" href="https://twitter.com/intent/tweet?text=H200%20vs%20MI300X%3A%20what%20you%27re%20actually%20paying%20for&amp;url=https%3A%2F%2Fdatatalkwithankit.com%2Fposts%2Fh200-vs-mi300x">Post on X</a>
+    <a class="btn" href="https://news.ycombinator.com/submitlink?u=https%3A%2F%2Fdatatalkwithankit.com%2Fposts%2Fh200-vs-mi300x&amp;t=H200%20vs%20MI300X%3A%20what%20you%27re%20actually%20paying%20for">Submit to Hacker News</a>
     <button class="btn" type="button" id="copy-link">Copy link</button>
   </div>
 </article>

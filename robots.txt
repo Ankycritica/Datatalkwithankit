@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://datatalkwithankit.vercel.app/sitemap.xml
