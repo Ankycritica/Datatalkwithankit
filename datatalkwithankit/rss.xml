@@ -2,15 +2,15 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>DatatalkwithAnkit</title>
-    <link>https://datatalkwithankit.com</link>
+    <link>https://www.datatalkwithankit.com</link>
     <description>LLM inference benchmarks, GPUs, serving configs, and cost, by Ankit Dongare.</description>
     <language>en-us</language>
     <lastBuildDate>Sun, 11 Oct 2026 12:00:00 GMT</lastBuildDate>
-    <atom:link href="https://datatalkwithankit.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <atom:link href="https://www.datatalkwithankit.com/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
       <title>H200 vs MI300X: what you're actually paying for</title>
-      <link>https://datatalkwithankit.com/posts/h200-vs-mi300x</link>
-      <guid isPermaLink="true">https://datatalkwithankit.com/posts/h200-vs-mi300x</guid>
+      <link>https://www.datatalkwithankit.com/posts/h200-vs-mi300x</link>
+      <guid isPermaLink="true">https://www.datatalkwithankit.com/posts/h200-vs-mi300x</guid>
       <description>Memory, interconnect, and price compared across NVIDIA H200 and AMD MI300X: what the extra 51 GB buys, why PCIe vs NVLink decides multi-GPU scaling, and what a GPU-hour really costs on the neoclouds.</description>
       <pubDate>Fri, 21 Aug 2026 09:00:00 GMT</pubDate>
     </item>

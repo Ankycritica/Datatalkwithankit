@@ -7,21 +7,10 @@
       "has": [
         {
           "type": "host",
-          "value": "www.datatalkwithankit.com"
-        }
-      ],
-      "destination": "https://datatalkwithankit.com/:path*",
-      "permanent": true
-    },
-    {
-      "source": "/:path*",
-      "has": [
-        {
-          "type": "host",
           "value": "datatalkwithankit.vercel.app"
         }
       ],
-      "destination": "https://datatalkwithankit.com/:path*",
+      "destination": "https://www.datatalkwithankit.com/:path*",
       "permanent": true
     },
     {
