@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>H200 vs MI300X: what you're actually paying for · DatatalkwithAnkit</title>
+<meta name="description" content="Memory, interconnect, and price compared across NVIDIA H200 and AMD MI300X: what the extra 51 GB buys, why PCIe vs NVLink decides multi-GPU scaling, and what a GPU-hour really costs on the neoclouds.">
+<meta name="author" content="Ankit Dongare">
+<link rel="canonical" href="https://datatalkwithankit.vercel.app/posts/h200-vs-mi300x">
+<meta name="theme-color" content="#0C0B14">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/og-image.png">
+<link rel="alternate" type="application/rss+xml" title="DatatalkwithAnkit" href="/rss.xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="DatatalkwithAnkit">
+<meta property="og:title" content="H200 vs MI300X: what you're actually paying for · DatatalkwithAnkit">
+<meta property="og:description" content="Memory, interconnect, and price compared across NVIDIA H200 and AMD MI300X: what the extra 51 GB buys, why PCIe vs NVLink decides multi-GPU scaling, and what a GPU-hour really costs on the neoclouds.">
+<meta property="og:url" content="https://datatalkwithankit.vercel.app/posts/h200-vs-mi300x">
+<meta property="og:image" content="https://datatalkwithankit.vercel.app/og-h200-vs-mi300x.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="H200 vs MI300X: what you're actually paying for · DatatalkwithAnkit">
+<meta name="twitter:description" content="Memory, interconnect, and price compared across NVIDIA H200 and AMD MI300X: what the extra 51 GB buys, why PCIe vs NVLink decides multi-GPU scaling, and what a GPU-hour really costs on the neoclouds.">
+<meta name="twitter:image" content="https://datatalkwithankit.vercel.app/og-h200-vs-mi300x.png">
+<script>try{if(localStorage.getItem('theme')==='light')document.documentElement.setAttribute('data-theme','light')}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<link rel="stylesheet" href="/style.css">
+<script defer src="/_vercel/insights/script.js"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "H200 vs MI300X: what you're actually paying for", "description": "Memory, interconnect, and price compared across NVIDIA H200 and AMD MI300X: what the extra 51 GB buys, why PCIe vs NVLink decides multi-GPU scaling, and what a GPU-hour really costs on the neoclouds.", "datePublished": "2026-08-21", "dateModified": "2026-10-11", "author": {"@type": "Person", "name": "Ankit Dongare", "url": "https://datatalkwithankit.vercel.app"}, "image": "https://datatalkwithankit.vercel.app/og-h200-vs-mi300x.png", "mainEntityOfPage": "https://datatalkwithankit.vercel.app/posts/h200-vs-mi300x", "keywords": "NVIDIA H200, AMD MI300X, NVLink, PCIe, LLM inference, vLLM, GPU pricing, neocloud, HBM3e, ROCm, KV cache"}</script>
+<meta name="keywords" content="NVIDIA H200, AMD MI300X, H200 vs MI300X, NVLink vs PCIe, LLM inference, GPU pricing, neocloud, HBM3e, ROCm, KV cache">
+<meta property="article:published_time" content="2026-08-21">
+<meta property="article:author" content="Ankit Dongare">
+</head>
+<body>
+<header class="site-head">
+  <div class="wrap head-inner">
+    <a class="wordmark" href="/" aria-label="DatatalkwithAnkit, home">Datatalkwith<b>Ankit</b></a>
+    <nav class="nav" aria-label="Main"><a href="/blog" aria-current="page">Writing</a><a href="/papers">Papers</a><a href="/#projects">Projects</a><a href="/uses">Uses</a><a href="/#contact">Contact</a></nav>
+      <button class="theme" type="button" aria-label="Switch between light and dark theme">
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2 12h2.2M19.8 12H22M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></svg>
+      </button>
+  </div>
+</header>
+<main class="wrap">
+<article class="article">
+  <a class="crumb" href="/blog">Back to all writing</a>
+  <h1>H200 vs MI300X: what you're actually paying for</h1>
+  <div class="byline-row">
+    <img src="/images/ankit-hero.jpg" alt="" width="40" height="40">
+    <div><strong>Ankit Dongare</strong>Aug 21, 2026, 9 minute read</div>
+  </div>
+  <div class="prose">
+    <p>I spent a chunk of last month on a question that sounds simple. Fixed budget, a 70B model to serve. Which GPU do I rent?</p>
+    <p>Every comparison I found opened with a TFLOPS table, which is close to useless for what I was doing. Token generation isn't compute-bound. It's memory-bound. Your GPU spends most of the decode phase waiting on memory rather than doing math, so a chart of peak FLOPS is describing a bottleneck you don't have.</p>
+    <p>Here's what I found once I started looking at the parts that matter.</p>
+
+    <h2>The H200 is an H100 with better memory</h2>
+    <p>That's not a criticism, it's the design. Same GH100 die, same Tensor Cores, same peak FLOPS. NVIDIA swapped the memory subsystem: six stacks of 24 GB HBM3e instead of five of 16 GB HBM3. You get 141 GB at 4.8 TB/s where the H100 gave you 80 GB at 3.35 TB/s.</p>
+    <p>The consequence is more interesting than the spec. H100 and H200 perform almost identically on prefill, since chewing through your prompt is compute-bound and the compute didn't change. The gap only opens during decode. Serving chat means you live in decode, so you feel the whole 43% bandwidth increase. Doing bulk document processing with short outputs, you might barely notice.</p>
+    <p>The MI300X got to its numbers a different way. AMD went chiplet, eight compute dies and four I/O dies stitched together with Infinity Fabric, and that packaging is what allowed 192 GB of HBM3 at 5.3 TB/s. More capacity <em>and</em> more bandwidth than the H200.</p>
+
+    <figure class="figure">
+      <div class="table-scroll">
+      <table class="spec">
+        <thead><tr><th scope="col"><span class="sr-only">Spec</span></th><th scope="col">H200 SXM</th><th scope="col">MI300X</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Memory</th><td>141 GB HBM3e</td><td>192 GB HBM3</td></tr>
+          <tr><th scope="row">Bandwidth</th><td>4.8 TB/s</td><td>5.3 TB/s</td></tr>
+          <tr><th scope="row">Architecture</th><td>Hopper, monolithic</td><td>CDNA 3, chiplet</td></tr>
+          <tr><th scope="row">Power</th><td>700 W</td><td>750 W</td></tr>
+          <tr><th scope="row">GPU to GPU</th><td>NVLink, 900 GB/s</td><td>Infinity Fabric, about 896 GB/s</td></tr>
+          <tr><th scope="row">Software</th><td>CUDA</td><td>ROCm</td></tr>
+        </tbody>
+      </table>
+      </div>
+      <figcaption>Headline specs for the SXM and OAM versions of each GPU.</figcaption>
+    </figure>
+
+    <p>On memory, AMD wins. That part isn't really debatable. Whether it matters is a different question.</p>
+
+    <h2>What the extra 51 GB is actually for</h2>
+    <p>The useful question isn't which number is bigger. It's how many GPUs you need to hold your model.</p>
+    <p>Weights run about 2 bytes per parameter at FP16, roughly 1 at FP8. Then there's KV cache, which grows with batch size and context length, and which in my experience is what actually breaks things. People size for weights, forget cache, then wonder why throughput falls apart at batch 32.</p>
+    <p>A 70B model at FP16 is around 140 GB of weights. That technically fits in an H200's 141 GB and leaves you nothing for cache, so realistically you're running two. The same model on an MI300X leaves roughly 50 GB of headroom. One GPU.</p>
+    <p>That's the real pitch, more than the bandwidth number. When a model fits on one device you delete a whole category of problems: no tensor parallelism, no per-layer synchronization, one thing to fail instead of eight. I'd take that simplification over a few percent of bandwidth most days.</p>
+    <div class="callout"><p>Try other sizes in the <a href="/#fit-section">will-it-fit calculator</a> on the home page.</p></div>
+
+    <h2>PCIe or NVLink, and why it decides everything above one GPU</h2>
+    <p>PCIe Gen5 x16 moves about 128 GB/s bidirectional. NVLink on an H200 SXM moves 900 GB/s per GPU. Roughly seven times the bandwidth, and it's the entire reason SXM nodes exist as a product.</p>
+
+    <figure class="figure">
+      <div class="mini-chart" role="img" aria-label="GPU to GPU bandwidth: PCIe Gen5 128 GB per second, NVLink 900 GB per second">
+        <div class="mc-row"><b>PCIe 5</b><div class="mc-track"><div class="mc-fill c" style="width:14%"></div></div><span>128 GB/s</span></div>
+        <div class="mc-row"><b>NVLink</b><div class="mc-track"><div class="mc-fill v" style="width:100%"></div></div><span>900 GB/s</span></div>
+      </div>
+      <figcaption>GPU-to-GPU bandwidth, bidirectional, per GPU.</figcaption>
+    </figure>
+
+    <p>Why that gap matters so much: tensor parallelism splits each layer across GPUs, so every layer needs an all-reduce, for every token. Eighty layers and a few hundred output tokens means tens of thousands of collectives per request. Over PCIe that collective becomes the bottleneck, and you end up with expensive silicon sitting idle waiting on its neighbours.</p>
+    <p>The heuristic I've settled on: PCIe is fine when each GPU runs its own copy of the model. You want NVLink when GPUs have to cooperate on one model. Four independent replicas of a 30B? PCIe cards, save the money. One 405B split eight ways? The interconnect is the thing you're buying, not the GPU.</p>
+    <p>There's also an H200 NVL variant, a PCIe card that bridges up to four GPUs over NVLink. It exists for standard air-cooled racks that can't host an 8-GPU SXM baseboard. Useful, but slower than SXM once you're doing serious tensor-parallel work.</p>
+    <p>One correction while I'm here, because it caught me out. Several sites list the H200 as having NVLink 5.0 at 1.8 TB/s. It doesn't. H200 is Hopper, so it's NVLink 4.0 at 900 GB/s. The 1.8 TB/s figure belongs to Blackwell. I'd built half a spreadsheet on the wrong number before I noticed, so if you're comparing tables, check that row.</p>
+
+    <h2>Going from 1 to 8</h2>
+    <p>Nobody gets linear scaling. Here's what each step buys:</p>
+    <ul>
+      <li><strong>One GPU</strong> is simplest and often fastest per token, assuming it fits. Zero collectives.</li>
+      <li><strong>Two</strong> is the cheapest way to double memory, with a direct peer link and modest overhead.</li>
+      <li><strong>Four</strong> tends to be the sweet spot for serving 70B-class models at volume.</li>
+      <li><strong>Eight</strong> is the standard node, an HGX H200 or an eight-way MI300X box. On the NVIDIA side you get a full NVSwitch fabric, so any GPU talks to any other at full speed.</li>
+    </ul>
+    <p>This is where the picture flips. In published 8-GPU training comparisons, NVLink nodes land around 87% scaling efficiency against roughly 78% for MI300X, and the gap grows with node count. Per-chip memory doesn't help you when the constraint is how well eight chips pretend to be one.</p>
+    <p>So AMD wins when you're trying to use fewer GPUs, and NVIDIA wins when you need many working together. Those are different problems, and people conflate them constantly.</p>
+
+    <h2>What it costs, and who the neoclouds are</h2>
+    <p>Neocloud is the label for GPU specialists like CoreWeave, Lambda, Nebius, Crusoe, RunPod, and GMI, as opposed to the big three. They undercut hyperscalers because selling compute is the whole business rather than a line item carrying a lot of platform overhead.</p>
+    <p>The spread is genuinely wide. Published H200 rates this year have run from around $2.60 an hour at the cheap end to $6.31 at CoreWeave. That's about $2,600 a month on a single GPU, or somewhere near $21,000 a month across eight, for identical silicon. MI300X has come down further, as low as roughly $1.71 an hour at Crusoe, with spot going under a dollar.</p>
+    <p>Run the memory-per-dollar math and it's stark. An H200 at $2.60 is about $0.018 per GB-hour. An MI300X at $1.71 is about $0.009. Half the price for the same gigabyte.</p>
+    <p>Before acting on that, though, the hourly rate isn't the bill:</p>
+    <ul>
+      <li><strong>Minimum node size.</strong> CoreWeave won't sell you fewer than eight GPUs. You pay for the node whether you use it or not.</li>
+      <li><strong>Egress.</strong> Moving weights and datasets out can quietly eat the savings. Some providers charge nothing, some very much do.</li>
+      <li><strong>Preemption.</strong> Cheap often means spot. Fine for training with checkpoints, bad for anything user-facing.</li>
+      <li><strong>Utilization.</strong> A GPU you rent and don't saturate is the most expensive one you'll ever buy.</li>
+    </ul>
+    <p>That last one is the one I keep relearning.</p>
+
+    <h2>How I'd choose</h2>
+    <p>I'd reach for the MI300X when the model fits in 192 GB but not 141 GB, when I'm serving long contexts where KV cache dominates, when the stack is already vLLM or SGLang on ROCm, and when cost per gigabyte matters more than shaving the last few milliseconds.</p>
+    <p>I'd reach for the H200 when I'm doing tensor parallelism at four or eight GPUs, when I depend on CUDA-specific kernels, when latency consistency is a product requirement rather than a nice-to-have, or when I'm training rather than serving.</p>
+    <p>Reduced to one line: AMD sells memory, NVIDIA sells interconnect and a software stack that already works. Which is the better buy depends on whether your problem is fitting the model or making a pile of GPUs behave like one.</p>
+    <p>I'd rather measure this than argue about it, so the next post is a real batch-size sweep on a single GPU with the configs published. If a number here is wrong or has gone stale, <a href="/#contact">tell me</a> and I'll fix it.</p>
+    <p style="color:var(--muted);font-size:.95rem"><em>Figures checked August 2026. GPU pricing moves fast, so check current rates before deciding anything on them.</em></p>
+  </div>
+  <div class="share">
+    <span>Share this post</span>
+    <a class="btn" href="https://twitter.com/intent/tweet?text=H200%20vs%20MI300X%3A%20what%20you%27re%20actually%20paying%20for&amp;url=https%3A%2F%2Fdatatalkwithankit.vercel.app%2Fposts%2Fh200-vs-mi300x">Post on X</a>
+    <a class="btn" href="https://news.ycombinator.com/submitlink?u=https%3A%2F%2Fdatatalkwithankit.vercel.app%2Fposts%2Fh200-vs-mi300x&amp;t=H200%20vs%20MI300X%3A%20what%20you%27re%20actually%20paying%20for">Submit to Hacker News</a>
+    <button class="btn" type="button" id="copy-link">Copy link</button>
+  </div>
+</article>
+<div class="article-end">
+  <div class="panel" style="margin:24px 0 72px">
+    <h2>Get the next one by email</h2>
+    <p>The batch-size sweep is next, with every config published. Subscribe and it'll land in your inbox.</p>
+    <a class="btn solid" href="/#newsletter">Subscribe</a>
+  </div>
+</div>
+</main>
+<footer class="site-foot">
+  <div class="wrap foot-inner">
+    <span>&copy; 2026 Ankit Dongare, Washington, DC</span>
+    <nav aria-label="Footer">
+      <a href="/blog">Writing</a><a href="/papers">Papers</a><a href="/uses">Uses</a>
+      <a href="/rss.xml">RSS feed</a><a href="https://github.com/Ankycritica">GitHub</a>
+    </nav>
+  </div>
+</footer>
+<script src="/site.js" defer></script>
+</body>
+</html>

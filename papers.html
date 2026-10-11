@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Papers · DatatalkwithAnkit</title>
+<meta name="description" content="Longer, structured write-ups on LLM inference benchmarking and configuration by Ankit Dongare, each with code and raw data.">
+<meta name="author" content="Ankit Dongare">
+<link rel="canonical" href="https://datatalkwithankit.vercel.app/papers">
+<meta name="theme-color" content="#0C0B14">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/og-image.png">
+<link rel="alternate" type="application/rss+xml" title="DatatalkwithAnkit" href="/rss.xml">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DatatalkwithAnkit">
+<meta property="og:title" content="Papers · DatatalkwithAnkit">
+<meta property="og:description" content="Longer, structured write-ups on LLM inference benchmarking and configuration by Ankit Dongare, each with code and raw data.">
+<meta property="og:url" content="https://datatalkwithankit.vercel.app/papers">
+<meta property="og:image" content="https://datatalkwithankit.vercel.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Papers · DatatalkwithAnkit">
+<meta name="twitter:description" content="Longer, structured write-ups on LLM inference benchmarking and configuration by Ankit Dongare, each with code and raw data.">
+<meta name="twitter:image" content="https://datatalkwithankit.vercel.app/og-image.png">
+<script>try{if(localStorage.getItem('theme')==='light')document.documentElement.setAttribute('data-theme','light')}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<link rel="stylesheet" href="/style.css">
+<script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<header class="site-head">
+  <div class="wrap head-inner">
+    <a class="wordmark" href="/" aria-label="DatatalkwithAnkit, home">Datatalkwith<b>Ankit</b></a>
+    <nav class="nav" aria-label="Main"><a href="/blog">Writing</a><a href="/papers" aria-current="page">Papers</a><a href="/#projects">Projects</a><a href="/uses">Uses</a><a href="/#contact">Contact</a></nav>
+      <button class="theme" type="button" aria-label="Switch between light and dark theme">
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2 12h2.2M19.8 12H22M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></svg>
+      </button>
+  </div>
+</header>
+<main class="wrap">
+  <div class="page-head">
+    <h1>Papers</h1>
+    <p>Longer, structured write-ups: reproducible benchmarks, methodology notes, and deep dives on LLM configuration. Each one ships with its code and raw data, and preprints will be cross-posted when they're ready.</p>
+  </div>
+  <div class="posts">
+    <div class="post-row"><span class="when">Draft</span><div><h3>A practical evaluation framework for LLM inference configurations</h3><p>A structured way to compare serving configurations, including quantization, batching, and context length, across throughput, latency, and cost, with an open-source harness.</p></div><span class="status">In progress</span></div>
+    <div class="post-row"><span class="when">Planned</span><div><h3>Benchmarking vLLM serving parameters on single-GPU deployments</h3><p>An empirical study of vLLM scheduler and memory settings on commodity hardware, mapping concurrency against tail latency and memory headroom.</p></div><span class="status">Planned</span></div>
+    <div class="post-row"><span class="when">Planned</span><div><h3>Notes on reproducibility in LLM benchmarking</h3><p>What an inference benchmark has to report, from hardware and warmup to workload shape and sampling settings, for someone else to reproduce the number.</p></div><span class="status">Planned</span></div>
+  </div>
+
+  <section class="section" style="border-top:0;padding-bottom:40px" aria-labelledby="method-title">
+    <div class="sec-head"><h2 id="method-title">How I run an experiment</h2><p>The same six steps, every time.</p></div>
+    <ol class="steps">
+      <li><h3>Ask one narrow question</h3><p>Something a number can answer, not an opinion.</p></li>
+      <li><h3>Fix the setup</h3><p>Same hardware, model, and workload. Warm up properly and record every parameter that could move the result.</p></li>
+      <li><h3>Measure the spread</h3><p>Multiple runs, reported as a range. Latency gets percentiles, never an average alone.</p></li>
+      <li><h3>Publish the raw data</h3><p>Configs, scripts, and unedited results go up next to the write-up.</p></li>
+      <li><h3>Report what failed</h3><p>Runs that contradict the hypothesis get written up too. They're usually the useful ones.</p></li>
+      <li><h3>Find the next question</h3><p>Every result raises a sharper question, and that becomes the next experiment.</p></li>
+    </ol>
+  </section>
+  <div class="panel" style="margin:16px 0 72px">
+    <h2>Want to collaborate on a write-up?</h2>
+    <p>If you're working on LLM evaluation or inference and want a second pair of hands, I'd like to hear about it.</p>
+    <a class="btn solid" href="/#contact">Send a message</a>
+  </div>
+</main>
+<footer class="site-foot">
+  <div class="wrap foot-inner">
+    <span>&copy; 2026 Ankit Dongare, Washington, DC</span>
+    <nav aria-label="Footer">
+      <a href="/blog">Writing</a><a href="/papers">Papers</a><a href="/uses">Uses</a>
+      <a href="/rss.xml">RSS feed</a><a href="https://github.com/Ankycritica">GitHub</a>
+    </nav>
+  </div>
+</footer>
+<script src="/site.js" defer></script>
+</body>
+</html>
