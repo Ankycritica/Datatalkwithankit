@@ -3,15 +3,16 @@
   <channel>
     <title>DatatalkwithAnkit</title>
     <link>https://datatalkwithankit.vercel.app</link>
-    <description>LLM experiments, vLLM benchmarks, AI agents, and automation — by Ankit Dongare.</description>
+    <description>LLM inference benchmarks, GPUs, serving configs, and cost, by Ankit Dongare.</description>
     <language>en-us</language>
+    <lastBuildDate>Sun, 11 Oct 2026 12:00:00 GMT</lastBuildDate>
     <atom:link href="https://datatalkwithankit.vercel.app/rss.xml" rel="self" type="application/rss+xml"/>
     <item>
-      <title>How batch size changes vLLM throughput: a first benchmark</title>
-      <link>https://datatalkwithankit.vercel.app/#post/vllm-batch</link>
-      <guid>https://datatalkwithankit.vercel.app/#post/vllm-batch</guid>
-      <description>A single-GPU sweep across max_num_seqs, measuring tokens/sec against p50 and p95 latency.</description>
-      <pubDate>Mon, 10 Aug 2026 09:00:00 GMT</pubDate>
+      <title>H200 vs MI300X: what you're actually paying for</title>
+      <link>https://datatalkwithankit.vercel.app/posts/h200-vs-mi300x</link>
+      <guid isPermaLink="true">https://datatalkwithankit.vercel.app/posts/h200-vs-mi300x</guid>
+      <description>Memory, interconnect, and price compared across NVIDIA H200 and AMD MI300X: what the extra 51 GB buys, why PCIe vs NVLink decides multi-GPU scaling, and what a GPU-hour really costs on the neoclouds.</description>
+      <pubDate>Fri, 21 Aug 2026 09:00:00 GMT</pubDate>
     </item>
   </channel>
 </rss>
