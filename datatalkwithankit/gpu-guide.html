@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Which GPU should you rent for LLM inference? · DatatalkwithAnkit</title>
-<meta name="description" content="A living guide to choosing a GPU for LLM inference: how many H100, H200 or MI300X GPUs a model needs, when the interconnect matters, and what it costs per hour. Updated quarterly.">
+<meta name="description" content="A living guide to choosing a GPU for LLM inference: how many H100, H200, B200, B300, MI300X, MI325X or MI355X GPUs a model needs, how they compare, and what they cost per hour. Updated quarterly.">
 <meta name="author" content="Ankit Dongare">
 <link rel="canonical" href="https://www.datatalkwithankit.com/gpu-guide">
 <meta name="theme-color" content="#0C0B14">
@@ -14,14 +14,14 @@
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="DatatalkwithAnkit">
 <meta property="og:title" content="Which GPU should you rent for LLM inference? · DatatalkwithAnkit">
-<meta property="og:description" content="A living guide to choosing a GPU for LLM inference: how many H100, H200 or MI300X GPUs a model needs, when the interconnect matters, and what it costs per hour. Updated quarterly.">
+<meta property="og:description" content="A living guide to choosing a GPU for LLM inference: how many H100, H200, B200, B300, MI300X, MI325X or MI355X GPUs a model needs, how they compare, and what they cost per hour. Updated quarterly.">
 <meta property="og:url" content="https://www.datatalkwithankit.com/gpu-guide">
 <meta property="og:image" content="https://www.datatalkwithankit.com/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Which GPU should you rent for LLM inference? · DatatalkwithAnkit">
-<meta name="twitter:description" content="A living guide to choosing a GPU for LLM inference: how many H100, H200 or MI300X GPUs a model needs, when the interconnect matters, and what it costs per hour. Updated quarterly.">
+<meta name="twitter:description" content="A living guide to choosing a GPU for LLM inference: how many H100, H200, B200, B300, MI300X, MI325X or MI355X GPUs a model needs, how they compare, and what they cost per hour. Updated quarterly.">
 <meta name="twitter:image" content="https://www.datatalkwithankit.com/og-image.png">
 <script>try{if(localStorage.getItem('theme')==='light')document.documentElement.setAttribute('data-theme','light')}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,7 +29,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
 <link rel="stylesheet" href="/style.css">
 <script defer src="/_vercel/insights/script.js"></script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Which GPU should you rent for LLM inference?", "description": "A living guide to choosing a GPU for LLM inference: how many H100, H200 or MI300X GPUs a model needs, when the interconnect matters, and what it costs per hour. Updated quarterly.", "datePublished": "2026-10-12", "dateModified": "2026-10-12", "author": {"@type": "Person", "name": "Ankit Dongare", "url": "https://www.datatalkwithankit.com"}, "mainEntityOfPage": "https://www.datatalkwithankit.com/gpu-guide", "keywords": "GPU for LLM inference, H100, H200, MI300X, GPU memory, tensor parallelism, NVLink, GPU rental price"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "Which GPU should you rent for LLM inference?", "description": "A living guide to choosing a GPU for LLM inference: how many H100, H200, B200, B300, MI300X, MI325X or MI355X GPUs a model needs, how they compare, and what they cost per hour. Updated quarterly.", "datePublished": "2026-10-12", "dateModified": "2026-10-12", "author": {"@type": "Person", "name": "Ankit Dongare", "url": "https://www.datatalkwithankit.com"}, "mainEntityOfPage": "https://www.datatalkwithankit.com/gpu-guide", "keywords": "GPU for LLM inference, H100, H200, B200, B300, MI300X, MI325X, MI355X, GPU memory, tensor parallelism, NVLink, GPU rental price"}</script>
 </head>
 <body>
 <header class="site-head">
@@ -43,87 +43,108 @@
   </div>
 </header>
 <main class="wrap">
-<article class="article">
+<article class="article wide">
   <a class="crumb" href="/blog">Back to all writing</a>
   <p class="kicker-line">Living guide &middot; Last updated Oct 12, 2026</p>
   <h1>Which GPU should you rent for LLM inference?</h1>
   <div class="byline-row">
     <img src="/images/ankit-hero.jpg" alt="" width="40" height="40">
-    <div><strong>Ankit Dongare</strong>Updated every quarter as prices and hardware change</div>
+    <div><strong>Ankit Dongare</strong>Covers 7 data-center GPUs. Updated every quarter.</div>
   </div>
   <div class="prose">
     <div class="tldr">
       <p class="tldr-h">The short version</p>
       <ol>
         <li><strong>Size the memory first.</strong> Token generation is memory-bound, so capacity and bandwidth matter more than peak FLOPS.</li>
-        <li><strong>Fit on one GPU if you can.</strong> It removes tensor parallelism, synchronization, and most failure modes.</li>
+        <li><strong>Fit on one GPU if you can.</strong> It removes tensor parallelism, synchronization, and most failure modes. The 256 to 288 GB GPUs (MI325X, B300, MI355X) fit much more on one device.</li>
         <li><strong>If you need several GPUs on one model, pay for the interconnect.</strong> NVLink nodes scale better than PCIe cards.</li>
         <li><strong>Compare the bill, not the hourly rate.</strong> Minimum node sizes, egress, preemption, and idle time change the real cost.</li>
       </ol>
     </div>
 
-    <h2>Step 1: How much memory does your model need?</h2>
+    <h2>Step 1: How many GPUs does your model need?</h2>
     <p>Weights take about 2 bytes per parameter at FP16 and about 1 at FP8. On top of that you need room for the KV cache, which grows with batch size and context length. I add 20% headroom as a starting point. Long contexts or big batches need more.</p>
-    <p>GPU counts below round up to 1, 2, 4 or 8, because tensor parallelism splits a model evenly across GPUs.</p>
+    <p>Counts round up to 1, 2, 4 or 8, because tensor parallelism splits a model evenly across GPUs. Above 8 means more than one 8-GPU node.</p>
     <figure class="figure">
+      <div class="seg guide-prec" id="guide-prec" role="group" aria-label="Precision">
+        <button type="button" data-v="fp16" aria-pressed="true">FP16</button>
+        <button type="button" data-v="fp8" aria-pressed="false">FP8</button>
+      </div>
       <div class="table-scroll">
-      <table class="spec plain">
-        <thead><tr><th scope="col">Model</th><th scope="col">Memory<small class="sub">needed</small></th><th scope="col">H100<small class="sub">80 GB</small></th><th scope="col">H200<small class="sub">141 GB</small></th><th scope="col">MI300X<small class="sub">192 GB</small></th></tr></thead>
+      <table class="spec plain fit-table" data-prec="fp16">
+        <thead><tr><th scope="col">GPU</th><th scope="col">8B<small class="sub">19 GB</small></th><th scope="col">32B<small class="sub">77 GB</small></th><th scope="col">70B<small class="sub">168 GB</small></th><th scope="col">123B<small class="sub">295 GB</small></th><th scope="col">405B<small class="sub">972 GB</small></th></tr></thead>
         <tbody>
-<tr><th scope="row">8B FP16</th><td>19 GB</td><td>1</td><td>1</td><td>1</td></tr>
-<tr><th scope="row">8B FP8</th><td>10 GB</td><td>1</td><td>1</td><td>1</td></tr>
-<tr><th scope="row">32B FP16</th><td>77 GB</td><td>1</td><td>1</td><td>1</td></tr>
-<tr><th scope="row">32B FP8</th><td>38 GB</td><td>1</td><td>1</td><td>1</td></tr>
-<tr><th scope="row">70B FP16</th><td>168 GB</td><td>4</td><td>2</td><td>1</td></tr>
-<tr><th scope="row">70B FP8</th><td>84 GB</td><td>2</td><td>1</td><td>1</td></tr>
-<tr><th scope="row">123B FP16</th><td>295 GB</td><td>4</td><td>4</td><td>2</td></tr>
-<tr><th scope="row">123B FP8</th><td>148 GB</td><td>2</td><td>2</td><td>1</td></tr>
-<tr><th scope="row">405B FP16</th><td>972 GB</td><td>16<small class='sub'>2 nodes</small></td><td>8</td><td>8</td></tr>
-<tr><th scope="row">405B FP8</th><td>486 GB</td><td>8</td><td>4</td><td>4</td></tr>
+<tr><th scope="row">H100<small class="sub">80 GB</small></th><td>1</td><td>1</td><td>4</td><td>4</td><td>16<small class='sub'>2 nodes</small></td></tr>
+<tr><th scope="row">H200<small class="sub">141 GB</small></th><td>1</td><td>1</td><td>2</td><td>4</td><td>8</td></tr>
+<tr><th scope="row">B200<small class="sub">180 GB</small></th><td>1</td><td>1</td><td>1</td><td>2</td><td>8</td></tr>
+<tr><th scope="row">B300<small class="sub">288 GB</small></th><td>1</td><td>1</td><td>1</td><td>2</td><td>4</td></tr>
+<tr><th scope="row">MI300X<small class="sub">192 GB</small></th><td>1</td><td>1</td><td>1</td><td>2</td><td>8</td></tr>
+<tr><th scope="row">MI325X<small class="sub">256 GB</small></th><td>1</td><td>1</td><td>1</td><td>2</td><td>4</td></tr>
+<tr><th scope="row">MI355X<small class="sub">288 GB</small></th><td>1</td><td>1</td><td>1</td><td>2</td><td>4</td></tr>
+        </tbody>
+      </table>
+      <table class="spec plain fit-table" data-prec="fp8" hidden>
+        <thead><tr><th scope="col">GPU</th><th scope="col">8B<small class="sub">10 GB</small></th><th scope="col">32B<small class="sub">38 GB</small></th><th scope="col">70B<small class="sub">84 GB</small></th><th scope="col">123B<small class="sub">148 GB</small></th><th scope="col">405B<small class="sub">486 GB</small></th></tr></thead>
+        <tbody>
+<tr><th scope="row">H100<small class="sub">80 GB</small></th><td>1</td><td>1</td><td>2</td><td>2</td><td>8</td></tr>
+<tr><th scope="row">H200<small class="sub">141 GB</small></th><td>1</td><td>1</td><td>1</td><td>2</td><td>4</td></tr>
+<tr><th scope="row">B200<small class="sub">180 GB</small></th><td>1</td><td>1</td><td>1</td><td>1</td><td>4</td></tr>
+<tr><th scope="row">B300<small class="sub">288 GB</small></th><td>1</td><td>1</td><td>1</td><td>1</td><td>2</td></tr>
+<tr><th scope="row">MI300X<small class="sub">192 GB</small></th><td>1</td><td>1</td><td>1</td><td>1</td><td>4</td></tr>
+<tr><th scope="row">MI325X<small class="sub">256 GB</small></th><td>1</td><td>1</td><td>1</td><td>1</td><td>2</td></tr>
+<tr><th scope="row">MI355X<small class="sub">288 GB</small></th><td>1</td><td>1</td><td>1</td><td>1</td><td>2</td></tr>
         </tbody>
       </table>
       </div>
-      <figcaption>GPUs needed per model copy. Memory needed = parameters &times; bytes per parameter &times; 1.2.</figcaption>
+      <figcaption>GPUs needed per model copy. Column headers show memory needed: parameters &times; bytes per parameter &times; 1.2.</figcaption>
     </figure>
-    <div class="callout"><p>Try your own numbers in the <a href="/#fit-section">will-it-fit calculator</a>.</p></div>
+    <div class="callout"><p>Try other sizes, including INT4, in the <a href="/#fit-section">will-it-fit calculator</a>.</p></div>
 
-    <h2>Step 2: Compare the GPUs that matter for inference</h2>
+    <h2>Step 2: Compare the specs that matter for inference</h2>
     <figure class="figure">
       <div class="table-scroll">
       <table class="spec plain">
-        <thead><tr><th scope="col"><span class="sr-only">Spec</span></th><th scope="col">H100 SXM</th><th scope="col">H200 SXM</th><th scope="col">MI300X</th></tr></thead>
+        <thead><tr><th scope="col">GPU</th><th scope="col">Memory</th><th scope="col">Bandwidth</th><th scope="col">GPU to GPU</th><th scope="col">Software</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Memory</th><td>80 GB HBM3</td><td>141 GB HBM3e</td><td>192 GB HBM3</td></tr>
-          <tr><th scope="row">Bandwidth</th><td>3.35 TB/s</td><td>4.8 TB/s</td><td>5.3 TB/s</td></tr>
-          <tr><th scope="row">GPU to GPU</th><td>NVLink, 900 GB/s</td><td>NVLink, 900 GB/s</td><td>Infinity Fabric, about 896 GB/s</td></tr>
-          <tr><th scope="row">Software</th><td>CUDA</td><td>CUDA</td><td>ROCm</td></tr>
+<tr><th scope="row">NVIDIA H100</th><td>80 GB HBM3</td><td>3.35 TB/s</td><td>NVLink 4, 900 GB/s</td><td>CUDA</td></tr>
+<tr><th scope="row">NVIDIA H200</th><td>141 GB HBM3e</td><td>4.8 TB/s</td><td>NVLink 4, 900 GB/s</td><td>CUDA</td></tr>
+<tr><th scope="row">NVIDIA B200</th><td>180 GB HBM3e</td><td>8 TB/s</td><td>NVLink 5, 1.8 TB/s</td><td>CUDA</td></tr>
+<tr><th scope="row">NVIDIA B300</th><td>288 GB HBM3e</td><td>8 TB/s</td><td>NVLink 5, 1.8 TB/s</td><td>CUDA</td></tr>
+<tr><th scope="row">AMD MI300X</th><td>192 GB HBM3</td><td>5.3 TB/s</td><td>Infinity Fabric</td><td>ROCm</td></tr>
+<tr><th scope="row">AMD MI325X</th><td>256 GB HBM3e</td><td>6 TB/s</td><td>Infinity Fabric</td><td>ROCm</td></tr>
+<tr><th scope="row">AMD MI355X</th><td>288 GB HBM3e</td><td>8 TB/s</td><td>Infinity Fabric</td><td>ROCm</td></tr>
         </tbody>
       </table>
       </div>
-      <figcaption>Headline specs. The H200 uses the same compute die as the H100, with more and faster memory.</figcaption>
+      <figcaption>Vendor specs per GPU (SXM/OAM versions). NVLink figures are total bidirectional bandwidth per GPU.</figcaption>
     </figure>
-    <p>Because decode is memory-bound, the H200's 43% higher bandwidth shows up directly in chat-style serving. Prefill is compute-bound, so H100 and H200 perform about the same there.</p>
+    <p>Because decode is memory-bound, bandwidth sets the ceiling on tokens per second per GPU. The H200 has 43% more bandwidth than the H100 on the same compute die. B200, B300, and MI355X all reach 8 TB/s, about 2.4 times an H100.</p>
 
     <h2>Step 3: One GPU, or several working together?</h2>
     <ul>
       <li><strong>Each GPU runs its own copy of the model:</strong> PCIe cards are fine. Save the money.</li>
-      <li><strong>Several GPUs share one model (tensor parallelism):</strong> every layer needs an all-reduce for every token. NVLink moves about 900 GB/s per GPU versus about 128 GB/s for PCIe Gen5 x16, so buy SXM nodes.</li>
-      <li><strong>Scaling to 8 GPUs:</strong> in published 8-GPU training comparisons, NVLink nodes reach around 87% scaling efficiency versus roughly 78% for MI300X.</li>
+      <li><strong>Several GPUs share one model (tensor parallelism):</strong> every layer needs an all-reduce for every token, so the GPU-to-GPU link becomes the bottleneck. NVLink 4 moves 900 GB/s per GPU and NVLink 5 doubles that to 1.8 TB/s, versus about 128 GB/s for PCIe Gen5 x16. Buy SXM nodes.</li>
+      <li><strong>Scaling to 8 GPUs:</strong> in published 8-GPU training comparisons of H200 and MI300X, NVLink nodes reached around 87% scaling efficiency versus roughly 78% for MI300X.</li>
     </ul>
 
     <h2>Step 4: Check the price, then the real bill</h2>
-    <p>Low-end published rates on neoclouds as of August 2026:</p>
+    <p>Lowest listed on-demand price per GPU-hour, sorted by price per GB of memory:</p>
     <figure class="figure">
       <div class="table-scroll">
       <table class="spec plain">
-        <thead><tr><th scope="col">GPU</th><th scope="col">Per hour</th><th scope="col">Per GB of memory per hour</th></tr></thead>
+        <thead><tr><th scope="col">GPU</th><th scope="col">Per hour</th><th scope="col">Per GB per hour</th></tr></thead>
         <tbody>
-          <tr><th scope="row">H200</th><td>$2.60</td><td>about $0.018</td></tr>
-          <tr><th scope="row">MI300X</th><td>$1.71</td><td>about $0.009</td></tr>
+<tr><th scope="row">AMD MI325X</th><td>$2.25</td><td>$0.009</td></tr>
+<tr><th scope="row">AMD MI300X</th><td>$2.39</td><td>$0.012</td></tr>
+<tr><th scope="row">NVIDIA H200</th><td>$2.09</td><td>$0.015</td></tr>
+<tr><th scope="row">NVIDIA B300</th><td>$4.99</td><td>$0.017</td></tr>
+<tr><th scope="row">AMD MI355X</th><td>$5.99</td><td>$0.021</td></tr>
+<tr><th scope="row">NVIDIA B200</th><td>$3.75</td><td>$0.021</td></tr>
+<tr><th scope="row">NVIDIA H100</th><td>$1.71</td><td>$0.021</td></tr>
         </tbody>
       </table>
       </div>
-      <figcaption>H200 rates run up to $6.31/hr at CoreWeave. MI300X spot capacity can go under $1/hr.</figcaption>
+      <figcaption>Source: lowest listed on-demand rates on <a href="https://getdeploying.com">getdeploying.com</a>, Oct 12, 2026. Some of the cheapest offers are not verified in stock, and prices change weekly.</figcaption>
     </figure>
     <p>Before you commit, check four things that change the real cost:</p>
     <ul>
@@ -137,23 +158,23 @@
     <figure class="figure">
       <div class="table-scroll">
       <table class="spec plain picks">
-        <thead><tr><th scope="col">If you are&hellip;</th><th scope="col">Rent</th></tr></thead>
+        <thead><tr><th scope="col">If you are&hellip;</th><th scope="col">Start with</th></tr></thead>
         <tbody>
-          <tr><th scope="row">Serving a model that fits in 192 GB but not 141 GB</th><td>MI300X</td></tr>
-          <tr><th scope="row">Serving long contexts where the KV cache dominates</th><td>MI300X</td></tr>
-          <tr><th scope="row">Optimizing cost per GB on vLLM or SGLang</th><td>MI300X</td></tr>
-          <tr><th scope="row">Running tensor parallelism across 4 or 8 GPUs</th><td>H200</td></tr>
-          <tr><th scope="row">Depending on CUDA-only kernels or needing steady latency</th><td>H200</td></tr>
-          <tr><th scope="row">Serving a small model, 32B or under at FP8</th><td>The cheapest single GPU with enough memory</td></tr>
+          <tr><th scope="row">Serving a small model, 32B or under at FP8</th><td>H100, the cheapest per hour</td></tr>
+          <tr><th scope="row">Fitting the most model per dollar of memory</th><td>MI325X, then MI300X</td></tr>
+          <tr><th scope="row">Fitting the biggest model on one GPU</th><td>B300 or MI355X, 288 GB</td></tr>
+          <tr><th scope="row">Chasing the highest tokens per second per GPU</th><td>B200, B300 or MI355X, 8 TB/s</td></tr>
+          <tr><th scope="row">Running tensor parallelism across 4 or 8 GPUs</th><td>B200 or B300 on NVLink 5</td></tr>
+          <tr><th scope="row">Depending on CUDA-only kernels</th><td>Any NVIDIA option</td></tr>
         </tbody>
       </table>
       </div>
     </figure>
-    <p>For the full reasoning, read <a href="/posts/h200-vs-mi300x">H200 vs MI300X: what you're actually paying for</a>.</p>
+    <p>For a deeper comparison of two of these, read <a href="/posts/h200-vs-mi300x">H200 vs MI300X: what you're actually paying for</a>.</p>
 
     <h2>Changelog</h2>
     <ul class="changelog">
-      <li><strong>Oct 12, 2026:</strong> First version. Covers H100, H200, and MI300X with August 2026 prices.</li>
+      <li><strong>Oct 12, 2026:</strong> First version. Covers H100, H200, B200, B300, MI300X, MI325X, and MI355X, with prices from getdeploying.com.</li>
     </ul>
     <p style="color:var(--muted);font-size:.95rem"><em>Figures are estimates for planning, not quotes. If a number here is wrong or has gone stale, <a href="/#contact">tell me</a> and I'll fix it.</em></p>
   </div>

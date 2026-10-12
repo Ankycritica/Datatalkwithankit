@@ -11,7 +11,7 @@
       <title>Which GPU should you rent for LLM inference?</title>
       <link>https://www.datatalkwithankit.com/gpu-guide</link>
       <guid isPermaLink="true">https://www.datatalkwithankit.com/gpu-guide</guid>
-      <description>A living guide to choosing a GPU for LLM inference: how many H100, H200 or MI300X GPUs a model needs, when the interconnect matters, and what it costs per hour. Updated quarterly.</description>
+      <description>A living guide to choosing a GPU for LLM inference: how many H100, H200, B200, B300, MI300X, MI325X or MI355X GPUs a model needs, how they compare, and what they cost per hour. Updated quarterly.</description>
       <pubDate>Mon, 12 Oct 2026 09:00:00 GMT</pubDate>
     </item>
     <item>

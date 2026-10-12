@@ -25,16 +25,14 @@
   /* ---------- will-it-fit calculator ---------- */
   var fit = document.getElementById('fit');
   if (fit) {
-    var GPUS = [
-      { key: 'h200', name: 'NVIDIA H200', mem: 141, rate: 2.60 },
-      { key: 'mi',   name: 'AMD MI300X',  mem: 192, rate: 1.71 }
-    ];
+    var rowsEls = Array.prototype.slice.call(fit.querySelectorAll('.fit-row'));
     var BYTES = { fp16: 2, fp8: 1, int4: 0.5 };
     var LABEL = { fp16: 'FP16', fp8: 'FP8', int4: 'INT4' };
     var state = { size: 70, prec: 'fp16' };
     var MAX_BLOCKS = 8;
 
     function money(n) { return '$' + n.toFixed(2); }
+    function pow2(n) { var p = 1; while (p < n) p *= 2; return p; } /* tensor parallelism splits evenly: 1, 2, 4, 8 */
 
     function render() {
       var need = state.size * BYTES[state.prec] * 1.2;
@@ -43,14 +41,15 @@
         '<span>Weights, plus 20% headroom for the KV cache.</span>';
 
       var best = null;
-      GPUS.forEach(function (g) {
-        var n = Math.max(1, Math.ceil(need / g.mem));
-        var p2 = 1; while (p2 < n) p2 *= 2; n = p2; /* tensor parallelism splits evenly: 1, 2, 4, 8 */
-        var perGpu = Math.min(100, (need / n) / g.mem * 100);
-        var cost = n * g.rate;
-        if (!best || cost < best.cost) best = { name: g.name, cost: cost, n: n };
+      rowsEls.forEach(function (row) {
+        var name = row.getAttribute('data-name');
+        var mem = parseFloat(row.getAttribute('data-mem'));
+        var rate = parseFloat(row.getAttribute('data-rate'));
+        var n = pow2(Math.max(1, Math.ceil(need / mem)));
+        var perGpu = Math.min(100, (need / n) / mem * 100);
+        var cost = n * rate;
+        if (!best || cost < best.cost) best = { name: name, cost: cost, n: n, row: row };
 
-        var row = document.getElementById('fit-' + g.key);
         var blocks = '';
         var shown = Math.min(n, MAX_BLOCKS);
         for (var i = 0; i < shown; i++) {
@@ -61,8 +60,10 @@
         row.querySelector('.fit-out').innerHTML =
           '<strong>' + n + (n === 1 ? ' GPU' : ' GPUs') + '</strong>' +
           '<span>about ' + money(cost) + ' per hour</span>';
-        row.setAttribute('aria-label', g.name + ': ' + n + (n === 1 ? ' GPU' : ' GPUs') + ', about ' + money(cost) + ' per hour');
+        row.setAttribute('aria-label', name + ': ' + n + (n === 1 ? ' GPU' : ' GPUs') + ', about ' + money(cost) + ' per hour');
+        row.classList.remove('best');
       });
+      best.row.classList.add('best');
       document.getElementById('fit-best').textContent =
         'Cheapest here: ' + best.n + ' ' + best.name + (best.n === 1 ? '' : 's') + ' at about ' + money(best.cost) + ' per hour.';
     }
@@ -81,6 +82,18 @@
     wire('fit-size', 'size', function (v) { return parseFloat(v); });
     wire('fit-prec', 'prec', function (v) { return v; });
     render();
+  }
+
+  /* ---------- guide precision toggle ---------- */
+  var gp = document.getElementById('guide-prec');
+  if (gp) {
+    gp.addEventListener('click', function (ev) {
+      var b = ev.target.closest('button');
+      if (!b) return;
+      gp.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', 'false'); });
+      b.setAttribute('aria-pressed', 'true');
+      document.querySelectorAll('.fit-table').forEach(function (t) { t.hidden = t.getAttribute('data-prec') !== b.dataset.v; });
+    });
   }
 
   /* ---------- blog filters ---------- */

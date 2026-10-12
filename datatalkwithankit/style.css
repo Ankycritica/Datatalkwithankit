@@ -307,3 +307,13 @@ a.post-row:hover h3{text-decoration:underline;text-underline-offset:4px;text-dec
   .spec.plain th,.spec.plain td{padding:9px 7px;font-size:.86rem;white-space:nowrap}
   .spec.plain.picks th,.spec.plain.picks td{white-space:normal}
 }
+
+/* ---------- 7-GPU calculator ---------- */
+.nv .gpu i{background:var(--violet)}
+.amd .gpu i{background:var(--cyan)}
+.fit-row.best .fit-out strong{color:var(--cyan)}
+.fit-row.best .fit-name::after{content:"Cheapest";display:inline-block;margin-top:6px;font-size:.72rem;font-weight:600;color:var(--cyan);border:1px solid color-mix(in srgb,var(--cyan) 45%,transparent);border-radius:999px;padding:1px 8px}
+.guide-prec{margin-bottom:14px}
+.fit-table[hidden]{display:none}
+.fit-table td{font-variant-numeric:tabular-nums}
+@media (max-width:760px){.fit-blocks{gap:6px;min-height:50px}.gpu{width:30px;height:46px}}

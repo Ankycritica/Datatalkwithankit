@@ -75,7 +75,7 @@
       <a class="start-card" href="/gpu-guide">
         <span class="kicker">Guide, updated quarterly</span>
         <h3>Which GPU should you rent for LLM inference?</h3>
-        <p>Size the memory, pick the interconnect, then compare price. One page, kept current.</p>
+        <p>Seven current GPUs compared: memory, bandwidth, GPUs per model, and price. Kept current.</p>
         <span class="go">Read the guide</span>
       </a>
       <a class="start-card" href="/posts/h200-vs-mi300x">
@@ -98,7 +98,7 @@
   <div class="wrap">
     <div class="sec-head">
       <h2 id="fit-title">Will your model fit?</h2>
-      <p>Pick a model size and precision to see how many GPUs it takes to hold, and what that costs per hour on the cheapest published neocloud rates.</p>
+      <p>Pick a model size and precision to see how many GPUs it takes on seven current data-center GPUs, and what that costs per hour.</p>
     </div>
     <div class="fit" id="fit">
       <div class="fit-controls">
@@ -122,19 +122,44 @@
         </div>
       </div>
       <p class="fit-need" id="fit-need" aria-live="polite"></p>
-      <div class="fit-row h200" id="fit-h200">
+      <div class="fit-row nv" data-name="NVIDIA H100" data-mem="80" data-rate="1.71">
+        <div class="fit-name">NVIDIA H100<small>80 GB per GPU</small></div>
+        <div class="fit-blocks"></div>
+        <div class="fit-out"></div>
+      </div>
+      <div class="fit-row nv" data-name="NVIDIA H200" data-mem="141" data-rate="2.09">
         <div class="fit-name">NVIDIA H200<small>141 GB per GPU</small></div>
         <div class="fit-blocks"></div>
         <div class="fit-out"></div>
       </div>
-      <div class="fit-row mi" id="fit-mi">
+      <div class="fit-row nv" data-name="NVIDIA B200" data-mem="180" data-rate="3.75">
+        <div class="fit-name">NVIDIA B200<small>180 GB per GPU</small></div>
+        <div class="fit-blocks"></div>
+        <div class="fit-out"></div>
+      </div>
+      <div class="fit-row nv" data-name="NVIDIA B300" data-mem="288" data-rate="4.99">
+        <div class="fit-name">NVIDIA B300<small>288 GB per GPU</small></div>
+        <div class="fit-blocks"></div>
+        <div class="fit-out"></div>
+      </div>
+      <div class="fit-row amd" data-name="AMD MI300X" data-mem="192" data-rate="2.39">
         <div class="fit-name">AMD MI300X<small>192 GB per GPU</small></div>
+        <div class="fit-blocks"></div>
+        <div class="fit-out"></div>
+      </div>
+      <div class="fit-row amd" data-name="AMD MI325X" data-mem="256" data-rate="2.25">
+        <div class="fit-name">AMD MI325X<small>256 GB per GPU</small></div>
+        <div class="fit-blocks"></div>
+        <div class="fit-out"></div>
+      </div>
+      <div class="fit-row amd" data-name="AMD MI355X" data-mem="288" data-rate="5.99">
+        <div class="fit-name">AMD MI355X<small>288 GB per GPU</small></div>
         <div class="fit-blocks"></div>
         <div class="fit-out"></div>
       </div>
       <div class="fit-foot">
         <p id="fit-best" aria-live="polite"></p>
-        <p>Rough estimate. GPU counts round up to 1, 2, 4 or 8, since tensor parallelism splits a model evenly. Rates are the low end of published prices, Aug 2026: H200 $2.60/hr, MI300X $1.71/hr. <a class="link" href="/posts/h200-vs-mi300x">How I got these numbers</a></p>
+        <p>Rough estimate. GPU counts round up to 1, 2, 4 or 8, since tensor parallelism splits a model evenly. Prices are the lowest listed on-demand rate per GPU-hour on getdeploying.com, Oct 12, 2026; some offers may not be in stock. <a class="link" href="/gpu-guide">Full GPU guide</a></p>
       </div>
     </div>
   </div>
