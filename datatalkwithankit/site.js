@@ -45,6 +45,7 @@
       var best = null;
       GPUS.forEach(function (g) {
         var n = Math.max(1, Math.ceil(need / g.mem));
+        var p2 = 1; while (p2 < n) p2 *= 2; n = p2; /* tensor parallelism splits evenly: 1, 2, 4, 8 */
         var perGpu = Math.min(100, (need / n) / g.mem * 100);
         var cost = n * g.rate;
         if (!best || cost < best.cost) best = { name: g.name, cost: cost, n: n };

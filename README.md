@@ -4,7 +4,7 @@
 
 **Benchmarks and writing on GPUs, LLM inference, and the AI market.**
 
-[datatalkwithankit.com](https://datatalkwithankit.com) · [Writing](https://datatalkwithankit.com/blog) · [Papers](https://datatalkwithankit.com/papers) · [RSS](https://datatalkwithankit.com/rss.xml)
+[datatalkwithankit.com](https://www.datatalkwithankit.com) · [Writing](https://www.datatalkwithankit.com/blog) · [Papers](https://www.datatalkwithankit.com/papers) · [RSS](https://www.datatalkwithankit.com/rss.xml)
 
 </div>
 
@@ -15,7 +15,8 @@ Personal site of **Ankit Dongare**, an AI engineer who measures what language mo
 ## Highlights
 
 - **Will-it-fit calculator**: pick a model size and precision to see how many H200 or MI300X GPUs it needs and the hourly cost.
-- **Long-form posts** such as [H200 vs MI300X: what you're actually paying for](https://datatalkwithankit.com/posts/h200-vs-mi300x).
+- **A living GPU guide** at [/gpu-guide](https://www.datatalkwithankit.com/gpu-guide), updated quarterly.
+- **Long-form posts** such as [H200 vs MI300X: what you're actually paying for](https://www.datatalkwithankit.com/posts/h200-vs-mi300x).
 - Fast and dependency-free: plain HTML, CSS and JavaScript, light and dark themes, responsive down to phone width.
 - SEO ready: canonical URLs, Open Graph images, JSON-LD, sitemap and RSS feed.
 
@@ -27,6 +28,7 @@ datatalkwithankit/      ← the deployed site (Vercel root directory)
 ├── blog.html           all writing          → /blog
 ├── papers.html         papers and method    → /papers
 ├── uses.html           tools                → /uses
+├── gpu-guide.html      living GPU guide     → /gpu-guide
 ├── posts/              one file per post    → /posts/<name>
 ├── style.css, site.js  shared styles and behavior
 ├── images/             photos

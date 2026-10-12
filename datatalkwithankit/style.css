@@ -272,3 +272,38 @@ a.post-row:hover h3{text-decoration:underline;text-underline-offset:4px;text-dec
 @media (prefers-reduced-motion:reduce){
   *{transition:none!important;animation:none!important}
 }
+
+/* ---------- start here ---------- */
+.start{border-top:0;padding-top:0}
+.start-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.start-card{display:flex;flex-direction:column;text-decoration:none;padding:26px;border-radius:18px;background:var(--panel);border:1px solid var(--line);transition:border-color .2s,transform .2s}
+.start-card:hover{border-color:var(--violet);transform:translateY(-2px)}
+.start-card .kicker{color:var(--cyan);font-weight:600;font-size:.85rem;margin-bottom:10px}
+.start-card h3{font-size:1.45rem;margin-bottom:10px}
+.start-card p{color:var(--muted);font-size:.96rem;margin-bottom:18px}
+.start-card .go{margin-top:auto;font-weight:600;font-size:.95rem}
+.start-card .go::after{content:" \2192";color:var(--violet)}
+
+/* ---------- about credentials ---------- */
+.creds{list-style:none;margin:22px 0 0;padding:0;display:grid;gap:10px}
+.creds li{padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--muted);font-size:.95rem}
+.creds li strong{display:block;color:var(--text);font-weight:600}
+
+/* ---------- guide ---------- */
+.kicker-line{color:var(--cyan);font-weight:600;font-size:.92rem;margin-bottom:12px}
+.tldr{border:1px solid var(--line);border-left:3px solid var(--violet);border-radius:14px;background:var(--panel);padding:20px 24px;margin-bottom:1.6em}
+.tldr-h{font-family:var(--display);font-weight:600;font-size:1.2rem;color:var(--text)!important;margin-bottom:.6em}
+.tldr ol{margin:0;padding-left:1.2em;color:var(--soft)}
+.tldr li{margin-bottom:.5em}
+.spec small{color:var(--muted);font-size:.82em}
+.picks td{color:var(--text);font-weight:600}
+.changelog{list-style:none;padding-left:0!important}
+
+@media (max-width:900px){.start-grid{grid-template-columns:1fr}}
+.spec.plain thead th{color:var(--text)}
+.spec small.sub{display:block;font-weight:400;color:var(--muted);font-size:.8em}
+@media (max-width:760px){
+  .figure{padding:14px 10px}
+  .spec.plain th,.spec.plain td{padding:9px 7px;font-size:.86rem;white-space:nowrap}
+  .spec.plain.picks th,.spec.plain.picks td{white-space:normal}
+}

@@ -35,7 +35,7 @@
 <header class="site-head">
   <div class="wrap head-inner">
     <a class="wordmark" href="/" aria-label="DatatalkwithAnkit, home">Datatalkwith<b>Ankit</b></a>
-    <nav class="nav" aria-label="Main"><a href="/blog">Writing</a><a href="/papers">Papers</a><a href="/#projects">Projects</a><a href="/uses">Uses</a><a href="/#contact">Contact</a></nav>
+    <nav class="nav" aria-label="Main"><a href="/blog">Writing</a><a href="/gpu-guide">GPU guide</a><a href="/papers">Papers</a><a href="/#projects">Projects</a><a href="/uses">Uses</a><a href="/#contact">Contact</a></nav>
       <button class="theme" type="button" aria-label="Switch between light and dark theme">
         <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
         <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2 12h2.2M19.8 12H22M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></svg>
@@ -61,6 +61,35 @@
         <span>Latest</span>
         <a href="/posts/h200-vs-mi300x">H200 vs MI300X: what you're actually paying for</a>
       </div>
+    </div>
+  </div>
+</section>
+
+<section class="section start" aria-labelledby="start-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="start-title">Start here</h2>
+      <p>New to the site? These three are the best way in.</p>
+    </div>
+    <div class="start-grid">
+      <a class="start-card" href="/gpu-guide">
+        <span class="kicker">Guide, updated quarterly</span>
+        <h3>Which GPU should you rent for LLM inference?</h3>
+        <p>Size the memory, pick the interconnect, then compare price. One page, kept current.</p>
+        <span class="go">Read the guide</span>
+      </a>
+      <a class="start-card" href="/posts/h200-vs-mi300x">
+        <span class="kicker">Deep dive</span>
+        <h3>H200 vs MI300X: what you're actually paying for</h3>
+        <p>Memory, NVLink vs PCIe, and real neocloud prices, compared.</p>
+        <span class="go">Read the post</span>
+      </a>
+      <a class="start-card" href="#fit-section">
+        <span class="kicker">Tool</span>
+        <h3>Will your model fit?</h3>
+        <p>Pick a model size and precision. See GPUs needed and the hourly cost.</p>
+        <span class="go">Try the calculator</span>
+      </a>
     </div>
   </div>
 </section>
@@ -105,7 +134,7 @@
       </div>
       <div class="fit-foot">
         <p id="fit-best" aria-live="polite"></p>
-        <p>Rough estimate. Rates are the low end of published prices, Aug 2026: H200 $2.60/hr, MI300X $1.71/hr. <a class="link" href="/posts/h200-vs-mi300x">How I got these numbers</a></p>
+        <p>Rough estimate. GPU counts round up to 1, 2, 4 or 8, since tensor parallelism splits a model evenly. Rates are the low end of published prices, Aug 2026: H200 $2.60/hr, MI300X $1.71/hr. <a class="link" href="/posts/h200-vs-mi300x">How I got these numbers</a></p>
       </div>
     </div>
   </div>
@@ -199,8 +228,13 @@
     <div class="about-grid">
       <div class="about-text">
         <p>I started as a data analyst turning messy tables into answers, and kept following the harder questions until they led to building AI systems full time.</p>
-        <p>Today I work on the practical side of large language models: how they're served, how fast they run, what they cost, and how configuration choices change all three. Most of my week goes into benchmarking models and tuning serving stacks like vLLM.</p>
+        <p>Today I work on the practical side of large language models: how they're served, how fast they run, what they cost, and how configuration choices change all three. At work I benchmark and evaluate an enterprise LLM inference platform, measuring throughput, latency, and cost across models, serving configs, and hardware.</p>
         <p>That data background still shapes how I work. I trust measurements over opinions, and if I do something twice, I write a script for it.</p>
+        <ul class="creds">
+          <li><strong>Inference benchmarking</strong>Evaluating an enterprise LLM inference platform at work</li>
+          <li><strong>Product builder</strong>Designs, ships, and runs <a class="link" href="https://aurapal.org">Aurapal</a> in production</li>
+          <li><strong>Engineer by training</strong>Mechanical engineering degree, then data analytics, then AI</li>
+        </ul>
         <p class="stack-line">Day to day: Python, PyTorch, vLLM, Hugging Face, Docker, and AWS. The full list is on the <a class="link" href="/uses">uses page</a>.</p>
       </div>
       <div class="about-photos">
@@ -250,7 +284,7 @@
   <div class="wrap foot-inner">
     <span>&copy; 2026 Ankit Dongare, Washington, DC</span>
     <nav aria-label="Footer">
-      <a href="/blog">Writing</a><a href="/papers">Papers</a><a href="/uses">Uses</a>
+      <a href="/blog">Writing</a><a href="/gpu-guide">GPU guide</a><a href="/papers">Papers</a><a href="/uses">Uses</a>
       <a href="/rss.xml">RSS feed</a><a href="https://github.com/Ankycritica">GitHub</a>
     </nav>
   </div>
