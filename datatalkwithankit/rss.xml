@@ -11,14 +11,14 @@
       <title>Which GPU should you rent for LLM inference?</title>
       <link>https://www.datatalkwithankit.com/gpu-guide</link>
       <guid isPermaLink="true">https://www.datatalkwithankit.com/gpu-guide</guid>
-      <description>A living guide to choosing a GPU for LLM inference: how many H100, H200, B200, B300, MI300X, MI325X or MI355X GPUs a model needs, how they compare, and what they cost per hour. Updated quarterly.</description>
+      <description>How many H100, H200, B200, B300, MI300X, MI325X or MI355X GPUs your LLM needs, how they compare, and what they cost per hour. Updated quarterly.</description>
       <pubDate>Mon, 12 Oct 2026 09:00:00 GMT</pubDate>
     </item>
     <item>
       <title>H200 vs MI300X: what you're actually paying for</title>
       <link>https://www.datatalkwithankit.com/posts/h200-vs-mi300x</link>
       <guid isPermaLink="true">https://www.datatalkwithankit.com/posts/h200-vs-mi300x</guid>
-      <description>Memory, interconnect, and price compared across NVIDIA H200 and AMD MI300X: what the extra 51 GB buys, why PCIe vs NVLink decides multi-GPU scaling, and what a GPU-hour really costs on the neoclouds.</description>
+      <description>NVIDIA H200 vs AMD MI300X for LLM inference: what the extra 51 GB of memory buys, NVLink vs PCIe scaling, and real neocloud prices per GPU-hour.</description>
       <pubDate>Fri, 21 Aug 2026 09:00:00 GMT</pubDate>
     </item>
   </channel>

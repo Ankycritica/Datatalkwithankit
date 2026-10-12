@@ -340,3 +340,11 @@ a.post-row:hover h3{text-decoration:underline;text-underline-offset:4px;text-dec
 .about-grid .creds{margin-top:0}
 @media (max-width:900px){.hero-grid{grid-template-columns:1fr}}
 .hero h1{max-width:none;font-size:clamp(2.6rem,4.6vw,4.3rem)}
+/* ---------- FAQ ---------- */
+.faq{border-top:1px solid var(--line);padding:14px 0}
+.faq:last-of-type{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;font-weight:600;color:var(--text);list-style:none;display:flex;justify-content:space-between;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";color:var(--violet);font-weight:600}
+.faq[open] summary::after{content:"\2212"}
+.faq p{margin:10px 0 0;color:var(--soft)}

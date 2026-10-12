@@ -1,0 +1,16 @@
+# DatatalkwithAnkit
+
+> LLM inference benchmarks, GPU comparisons and prices, and AI market analysis by Ankit Dongare, an AI engineer who benchmarks LLM serving. Benchmarks are published with their configs.
+
+## Guides
+- [Best GPU for LLM inference (2026)](https://www.datatalkwithankit.com/gpu-guide): how many H100, H200, B200, B300, MI300X, MI325X or MI355X GPUs a model needs, specs, and lowest on-demand prices. Updated quarterly.
+
+## Posts
+- [H200 vs MI300X: what you're actually paying for](https://www.datatalkwithankit.com/posts/h200-vs-mi300x): memory, NVLink vs PCIe scaling, and neocloud pricing.
+
+## Tools
+- [Will-it-fit calculator](https://www.datatalkwithankit.com/#fit-section): GPUs needed and hourly cost for a model size and precision.
+
+## About
+- [Home](https://www.datatalkwithankit.com/): who Ankit is and what he works on.
+- [Uses](https://www.datatalkwithankit.com/uses): tools used for benchmarking.
