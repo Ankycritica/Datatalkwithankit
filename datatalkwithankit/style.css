@@ -317,3 +317,26 @@ a.post-row:hover h3{text-decoration:underline;text-underline-offset:4px;text-dec
 .fit-table[hidden]{display:none}
 .fit-table td{font-variant-numeric:tabular-nums}
 @media (max-width:760px){.fit-blocks{gap:6px;min-height:50px}.gpu{width:30px;height:46px}}
+
+/* ---------- hero without photo ---------- */
+.hero-grid{grid-template-columns:1.1fr .9fr}
+.hero h1{max-width:14ch}
+.board{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px 22px 18px}
+.board-head{margin-bottom:12px}
+.board-head h2{font-size:1.35rem}
+.board-head span{display:block;color:var(--muted);font-size:.84rem;margin-top:4px}
+.board-row{display:grid;grid-template-columns:118px 1fr 58px;gap:12px;align-items:center;padding:9px 0;border-top:1px solid var(--line);font-size:.92rem}
+.board-row .bn{font-weight:600;line-height:1.2}
+.board-row .bn small{display:block;color:var(--muted);font-weight:400;font-size:.78rem}
+.board-row .bb{height:8px;border-radius:99px;background:var(--bg);overflow:hidden}
+.board-row .bb i{display:block;height:100%;border-radius:99px}
+.board-row.nv .bb i{background:var(--violet)}
+.board-row.amd .bb i{background:var(--cyan)}
+.board-row .bp{text-align:right;font-family:var(--mono);font-size:.86rem}
+.board-link{display:inline-block;margin-top:12px;font-weight:600;font-size:.92rem;text-decoration:none}
+.board-link::after{content:" \2192";color:var(--violet)}
+.board-link:hover{text-decoration:underline;text-underline-offset:4px}
+.avatar{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:var(--grad);color:#fff;font-family:var(--display);font-weight:700;font-size:.95rem;flex:none}
+.about-grid .creds{margin-top:0}
+@media (max-width:900px){.hero-grid{grid-template-columns:1fr}}
+.hero h1{max-width:none;font-size:clamp(2.6rem,4.6vw,4.3rem)}

@@ -29,7 +29,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
 <link rel="stylesheet" href="/style.css">
 <script defer src="/_vercel/insights/script.js"></script>
-<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Ankit Dongare", "url": "https://www.datatalkwithankit.com", "jobTitle": "AI Engineer", "image": "https://www.datatalkwithankit.com/images/ankit-hero.jpg", "sameAs": ["https://github.com/Ankycritica", "https://youtube.com/@datatalkwithankit", "https://instagram.com/datatalkwithankit", "https://aurapal.org"]}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Ankit Dongare", "url": "https://www.datatalkwithankit.com", "jobTitle": "AI Engineer", "sameAs": ["https://github.com/Ankycritica", "https://youtube.com/@datatalkwithankit", "https://instagram.com/datatalkwithankit", "https://aurapal.org"]}</script>
 </head>
 <body>
 <header class="site-head">
@@ -45,10 +45,6 @@
 <main>
 <section class="hero">
   <div class="wrap hero-grid">
-    <figure class="portrait">
-      <img src="/images/ankit-hero.jpg" alt="Ankit Dongare on the National Mall, with the US Capitol behind him" width="1000" height="1250" fetchpriority="high">
-      <figcaption>Washington, DC</figcaption>
-    </figure>
     <div>
       <p class="hero-who">Ankit Dongare, AI engineer</p>
       <h1>I measure what language models cost to run.</h1>
@@ -62,6 +58,20 @@
         <a href="/posts/h200-vs-mi300x">H200 vs MI300X: what you're actually paying for</a>
       </div>
     </div>
+    <aside class="board" aria-labelledby="board-title">
+      <div class="board-head">
+        <h2 id="board-title">GPU price board</h2>
+        <span>Lowest on-demand $/GPU-hour &middot; Oct 12, 2026</span>
+      </div>
+      <div class="board-row nv"><span class="bn">NVIDIA H100<small>80 GB</small></span><span class="bb"><i style="width:29%"></i></span><span class="bp">$1.71</span></div>
+      <div class="board-row nv"><span class="bn">NVIDIA H200<small>141 GB</small></span><span class="bb"><i style="width:35%"></i></span><span class="bp">$2.09</span></div>
+      <div class="board-row amd"><span class="bn">AMD MI325X<small>256 GB</small></span><span class="bb"><i style="width:38%"></i></span><span class="bp">$2.25</span></div>
+      <div class="board-row amd"><span class="bn">AMD MI300X<small>192 GB</small></span><span class="bb"><i style="width:40%"></i></span><span class="bp">$2.39</span></div>
+      <div class="board-row nv"><span class="bn">NVIDIA B200<small>180 GB</small></span><span class="bb"><i style="width:63%"></i></span><span class="bp">$3.75</span></div>
+      <div class="board-row nv"><span class="bn">NVIDIA B300<small>288 GB</small></span><span class="bb"><i style="width:83%"></i></span><span class="bp">$4.99</span></div>
+      <div class="board-row amd"><span class="bn">AMD MI355X<small>288 GB</small></span><span class="bb"><i style="width:100%"></i></span><span class="bp">$5.99</span></div>
+      <a class="board-link" href="/gpu-guide">Compare all 7 in the GPU guide</a>
+    </aside>
   </div>
 </section>
 
@@ -255,16 +265,14 @@
         <p>I started as a data analyst turning messy tables into answers, and kept following the harder questions until they led to building AI systems full time.</p>
         <p>Today I work on the practical side of large language models: how they're served, how fast they run, what they cost, and how configuration choices change all three. At work I benchmark and evaluate an enterprise LLM inference platform, measuring throughput, latency, and cost across models, serving configs, and hardware.</p>
         <p>That data background still shapes how I work. I trust measurements over opinions, and if I do something twice, I write a script for it.</p>
+        <p class="stack-line">Day to day: Python, PyTorch, vLLM, Hugging Face, Docker, and AWS. The full list is on the <a class="link" href="/uses">uses page</a>.</p>
+      </div>
+      <div>
         <ul class="creds">
           <li><strong>Inference benchmarking</strong>Evaluating an enterprise LLM inference platform at work</li>
           <li><strong>Product builder</strong>Designs, ships, and runs <a class="link" href="https://aurapal.org">Aurapal</a> in production</li>
           <li><strong>Engineer by training</strong>Mechanical engineering degree, then data analytics, then AI</li>
         </ul>
-        <p class="stack-line">Day to day: Python, PyTorch, vLLM, Hugging Face, Docker, and AWS. The full list is on the <a class="link" href="/uses">uses page</a>.</p>
-      </div>
-      <div class="about-photos">
-        <img src="/images/ankit-2.jpg" alt="Ankit Dongare outdoors with a dog" width="1600" height="1152" loading="lazy">
-        <img src="/images/ankit-3.jpg" alt="Ankit Dongare with the New York City skyline behind him" width="1600" height="1152" loading="lazy">
       </div>
     </div>
   </div>
