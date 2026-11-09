@@ -82,19 +82,20 @@ PERSON = {"@context": "https://schema.org", "@type": "Person", "name": "Ankit Do
 
 
 # ---- GPU data: single source for calculator and guide ----
-PRICE_DATE = "Oct 12, 2026"       # shown on the site; update with prices
-PRICE_DATE_ISO = "2026-10-12"     # same date, ISO; drives dateModified and sitemap lastmod
+PRICE_DATE = "Nov 9, 2026"       # shown on the site; update with prices
+PRICE_DATE_ISO = "2026-11-09"     # same date, ISO; drives dateModified and sitemap lastmod
 GPUS = [  # key, vendor, name, mem GB, memory type, bandwidth TB/s, interconnect, software, lowest on-demand $/GPU-hr
-    ("h100",   "nv",  "NVIDIA H100",  80,  "HBM3",  "3.35", "NVLink 4, 900 GB/s", "CUDA", 1.71),
+    ("h100",   "nv",  "NVIDIA H100",  80,  "HBM3",  "3.35", "NVLink 4, 900 GB/s", "CUDA", 1.80),
     ("h200",   "nv",  "NVIDIA H200",  141, "HBM3e", "4.8",  "NVLink 4, 900 GB/s", "CUDA", 2.09),
-    ("b200",   "nv",  "NVIDIA B200",  180, "HBM3e", "8",    "NVLink 5, 1.8 TB/s", "CUDA", 3.75),
-    ("b300",   "nv",  "NVIDIA B300",  288, "HBM3e", "8",    "NVLink 5, 1.8 TB/s", "CUDA", 4.99),
-    ("mi300x", "amd", "AMD MI300X",   192, "HBM3",  "5.3",  "Infinity Fabric",    "ROCm", 2.39),
+    ("b200",   "nv",  "NVIDIA B200",  180, "HBM3e", "8",    "NVLink 5, 1.8 TB/s", "CUDA", 4.11),
+    ("b300",   "nv",  "NVIDIA B300",  288, "HBM3e", "8",    "NVLink 5, 1.8 TB/s", "CUDA", 5.57),
+    ("mi300x", "amd", "AMD MI300X",   192, "HBM3",  "5.3",  "Infinity Fabric",    "ROCm", 1.99),
     ("mi325x", "amd", "AMD MI325X",   256, "HBM3e", "6",    "Infinity Fabric",    "ROCm", 2.25),
     ("mi355x", "amd", "AMD MI355X",   288, "HBM3e", "8",    "Infinity Fabric",    "ROCm", 5.99),
 ]
 # Newest first. Add an entry whenever prices or GPUs change.
 GUIDE_CHANGELOG = [
+    ("Nov 9, 2026", "Prices refreshed: H100 $1.71 → $1.80, B200 $3.75 → $4.11, B300 $4.99 → $5.57, MI300X $2.39 → $1.99."),
     ("Oct 12, 2026", "First version. Covers H100, H200, B200, B300, MI300X, MI325X, and MI355X, with prices from getdeploying.com."),
 ]
 FIT_ROWS = "".join(f"""      <div class="fit-row {v}" data-name="{n}" data-mem="{m}" data-rate="{r}">
