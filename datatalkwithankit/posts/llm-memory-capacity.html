@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What fits in GPU memory? A reproducible capacity study · DatatalkwithAnkit</title>
+<meta name="description" content="A transparent LLM memory-planning study: five model sizes, three weight precisions, seven GPUs, and 105 calculated scenarios. Download the Python, inputs, and CSV.">
+<meta name="author" content="Ankit Dongare">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<link rel="canonical" href="https://www.datatalkwithankit.com/posts/llm-memory-capacity">
+<meta name="theme-color" content="#0C0B14">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="alternate" type="application/rss+xml" title="DatatalkwithAnkit" href="/rss.xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="DatatalkwithAnkit">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="What fits in GPU memory? A reproducible capacity study · DatatalkwithAnkit">
+<meta property="og:description" content="A transparent LLM memory-planning study: five model sizes, three weight precisions, seven GPUs, and 105 calculated scenarios. Download the Python, inputs, and CSV.">
+<meta property="og:url" content="https://www.datatalkwithankit.com/posts/llm-memory-capacity">
+<meta property="og:image" content="https://www.datatalkwithankit.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="What fits in GPU memory? A reproducible capacity study · DatatalkwithAnkit">
+<meta name="twitter:description" content="A transparent LLM memory-planning study: five model sizes, three weight precisions, seven GPUs, and 105 calculated scenarios. Download the Python, inputs, and CSV.">
+<meta name="twitter:image" content="https://www.datatalkwithankit.com/og-image.png">
+<script>try{if(localStorage.getItem('theme')==='light')document.documentElement.setAttribute('data-theme','light')}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<link rel="stylesheet" href="/style.css">
+<script defer src="/_vercel/insights/script.js"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "What fits in GPU memory? A reproducible capacity study", "description": "A transparent LLM memory-planning study: five model sizes, three weight precisions, seven GPUs, and 105 calculated scenarios. Download the Python, inputs, and CSV.", "datePublished": "2026-11-17", "dateModified": "2026-11-17", "author": {"@type": "Person", "name": "Ankit Dongare", "url": "https://www.datatalkwithankit.com"}, "mainEntityOfPage": "https://www.datatalkwithankit.com/posts/llm-memory-capacity", "image": "https://www.datatalkwithankit.com/og-image.png"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.datatalkwithankit.com/"}, {"@type": "ListItem", "position": 2, "name": "What fits in GPU memory? A reproducible capacity study", "item": "https://www.datatalkwithankit.com/posts/llm-memory-capacity"}]}</script>
+</head>
+<body>
+<header class="site-head">
+  <div class="wrap head-inner">
+    <a class="wordmark" href="/" aria-label="DatatalkwithAnkit, home">Datatalkwith<b>Ankit</b></a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">Menu</button>
+    <nav class="nav" id="main-nav" aria-label="Main"><a href="/blog">Writing</a><a href="/gpu-guide">GPU guide</a><a href="/papers" aria-current="page">Studies</a><a href="/#projects">Projects</a><a href="/uses">Uses</a><a href="/#contact">Contact</a></nav>
+      <button class="theme" type="button" aria-label="Switch between light and dark theme">
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2 12h2.2M19.8 12H22M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></svg>
+      </button>
+  </div>
+</header>
+<main class="wrap"><article class="article"><a class="crumb" href="/blog">Back to all writing</a><p class="kicker-line">Study · Code, inputs, and results</p><h1>What fits in GPU memory? A reproducible capacity study</h1><div class="byline-row"><span class="byline-avatar" aria-hidden="true"><img src="/images/ankit-about.jpg" alt="" width="120" height="150" loading="lazy"></span><div><strong>Ankit Dongare</strong>Nov 17, 2026</div></div><div class="prose">
+<p class="article-intro">A GPU's hourly price only tells part of the story. First, the model has to fit. This study makes that first calculation explicit, with every input and result available to download.</p>
+<div class="study-label"><strong>Calculated capacity study</strong><span>105 scenarios · Python standard library · Published Nov 17, 2026</span></div>
+<p>These are memory and rental-cost estimates. They do not measure throughput, latency, model quality, or a successful deployment.</p>
+
+<h2>The question</h2>
+<p>How does changing weight precision affect the memory budget and the number of GPUs needed for the same parameter count? I compare 8B, 32B, 70B, 123B, and 405B models at FP16, FP8, and INT4 across the seven GPUs in the <a href="/gpu-guide">GPU guide</a>.</p>
+
+<h2>A small model with visible assumptions</h2>
+<p>The starting calculation uses decimal gigabytes:</p>
+<pre class="code-block"><code>weights_GB = parameters_in_billions × bytes_per_parameter
+planning_memory_GB = weights_GB × 1.20
+estimated_hourly_cost = candidate_GPU_count × listed_GPU_hourly_rate</code></pre>
+<p>I use 2 bytes per parameter for FP16, 1 for FP8, and 0.5 for INT4. The extra 20% is a planning allowance for runtime memory. It is an assumption, not a calculation of the KV cache. Quantization scales, metadata, mixed-precision layers, activations, and framework allocations can change the real requirement.</p>
+<p>Candidate GPU counts round up to powers of two: 1, 2, 4, 8, and so on. This keeps the worksheet consistent with the calculator's candidate configurations. It does not prove that a particular model supports that tensor-parallel degree, or that several GPUs will perform well together.</p>
+
+<h2>One 70B model, three memory budgets</h2>
+<figure class="figure capacity-chart"><div class="chart-legend"><span><i class="legend-weights"></i>Weights</span><span><i class="legend-headroom"></i>Planning allowance</span></div><div class="capacity-row"><b>FP16</b><span class="capacity-track"><i class="capacity-weight" style="width:83.3333%"></i><i class="capacity-headroom" style="width:16.6667%"></i></span><strong>168 GB</strong></div><div class="capacity-row"><b>FP8</b><span class="capacity-track"><i class="capacity-weight" style="width:41.6667%"></i><i class="capacity-headroom" style="width:8.3333%"></i></span><strong>84 GB</strong></div><div class="capacity-row"><b>INT4</b><span class="capacity-track"><i class="capacity-weight" style="width:20.8333%"></i><i class="capacity-headroom" style="width:4.1667%"></i></span><strong>42 GB</strong></div><figcaption>Calculated memory budget for a 70B model, including a 20% planning allowance. Decimal GB.</figcaption></figure>
+<p>For the 70B example, the FP16 weight estimate is 140 GB, followed by a 28 GB allowance. Changing the weight format to FP8 halves those two numbers in this model. INT4 halves them again. A smaller weight budget leaves more room, but says nothing about the quality or speed of that quantized model.</p>
+
+<h2>Why capacity changes the hourly comparison</h2>
+<p>At FP16, this worksheet budgets 168 GB for the 70B example. Here are three rows from the downloadable results:</p>
+<figure class="figure"><div class="table-scroll"><table class="spec plain"><thead><tr><th scope="col">GPU</th><th scope="col">Candidate count</th><th scope="col">Est. per hour</th></tr></thead><tbody><tr><th scope="row">NVIDIA H100</th><td>4</td><td>$7.20</td></tr><tr><th scope="row">NVIDIA H200</th><td>2</td><td>$4.18</td></tr><tr><th scope="row">AMD MI300X</th><td>1</td><td>$1.99</td></tr></tbody></table></div><figcaption>70B at FP16. Calculated candidates, using the Nov 9, 2026 price snapshot.</figcaption></figure>
+<p>The H100 candidate rounds from a three-GPU memory minimum to four GPUs under the worksheet's power-of-two rule. A different parallelism strategy could change that choice. The rates are the site's Nov 9, 2026 snapshot; node minimums, availability, networking, and utilization are outside this calculation.</p>
+
+<h2>Reproduce all 105 scenarios</h2>
+<p>Download these three small files into one folder. The configuration records the model sizes, bytes per parameter, headroom, GPU capacities, and dated prices. The CSV contains the full scenario matrix.</p>
+<div class="download-links">
+  <a class="btn solid" href="/downloads/memory-study.py" download>Python script</a>
+  <a class="btn" href="/downloads/memory-study-config.json" download>Inputs · JSON</a>
+  <a class="btn" href="/downloads/memory-study-results.csv" download>Results · CSV</a>
+</div>
+<pre class="code-block"><code>python3 memory-study.py --output reproduced.csv
+# No packages, API key, or GPU required.</code></pre>
+<p>With the supplied inputs, the generated CSV matches the published results. Change the headroom or a rental rate in the JSON and rerun it to explore a different assumption. The <a href="https://github.com/Ankycritica/Datatalkwithankit/blob/main/tools/memory_study.py">source lives in this website's repository</a>.</p>
+
+<h2>What to measure before renting for production</h2>
+<p>The next step is a serving experiment with the actual model, quantization implementation, prompt lengths, output lengths, and expected concurrency. Record time to first token, inter-token latency, completed requests, memory use, and any failed requests under that workload.</p>
+<p>vLLM's documentation explains how KV-cache pressure can cause preemption and how concurrency and parallelism affect that pressure. That workload-dependent behavior is why this worksheet's flat 20% allowance cannot guarantee a deployment will fit.</p>
+<p>Check the capacity in your runtime's units too: this worksheet uses decimal GB, while tools may report binary GiB. Hardware support for a weight format and the availability of appropriate kernels also need verification.</p>
+<div class="callout"><p>Use the <a href="/#fit-section">interactive calculator</a> to shortlist configurations. Use measured serving results to choose between them.</p></div>
+
+<h2>Inputs and references</h2>
+<ul class="references">
+  <li><a href="/gpu-guide">GPU guide</a>: the capacities and dated rental-price snapshot used in the worksheet.</li>
+  <li><a href="https://getdeploying.com">getdeploying.com</a>: source of the listed on-demand prices, checked Nov 9, 2026.</li>
+  <li><a href="https://docs.vllm.ai/en/latest/configuration/optimization/">vLLM: Optimization and Tuning</a>: runtime memory, preemption, and parallelism considerations.</li>
+</ul>
+</div></article><div class="article-end"><div class="panel article-subscribe"><h2>Get the next write-up</h2><p>Studies, practical tools, and notes on building AI systems.</p><a class="btn solid" href="/#newsletter">Get updates by email</a></div></div></main><footer class="site-foot">
+  <div class="wrap foot-inner">
+    <span>&copy; 2026 Ankit Dongare, Washington, DC</span>
+    <nav aria-label="Footer">
+      <a href="/blog">Writing</a><a href="/gpu-guide">GPU guide</a><a href="/papers">Studies</a><a href="/uses">Uses</a>
+      <a href="/rss.xml">RSS feed</a><a href="https://github.com/Ankycritica">GitHub</a>
+    </nav>
+  </div>
+</footer>
+<script src="/site.js" defer></script>
+</body>
+</html>

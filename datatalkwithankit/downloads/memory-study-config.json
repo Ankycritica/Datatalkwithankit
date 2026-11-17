@@ -1,0 +1,64 @@
+{
+  "description": "Calculated memory capacity and dated rental-cost scenarios; not a hardware benchmark.",
+  "memory_units": "decimal GB",
+  "headroom_fraction": 0.2,
+  "candidate_gpu_counts": "Powers of two; a planning convention, not a guarantee of model parallelism support.",
+  "model_billions": [
+    8,
+    32,
+    70,
+    123,
+    405
+  ],
+  "bytes_per_parameter": {
+    "FP16": 2,
+    "FP8": 1,
+    "INT4": 0.5
+  },
+  "price_date": "2026-11-09",
+  "price_source": "https://getdeploying.com",
+  "gpus": [
+    {
+      "key": "h100",
+      "name": "NVIDIA H100",
+      "memory_gb": 80,
+      "hourly_usd": 1.8
+    },
+    {
+      "key": "h200",
+      "name": "NVIDIA H200",
+      "memory_gb": 141,
+      "hourly_usd": 2.09
+    },
+    {
+      "key": "b200",
+      "name": "NVIDIA B200",
+      "memory_gb": 180,
+      "hourly_usd": 4.11
+    },
+    {
+      "key": "b300",
+      "name": "NVIDIA B300",
+      "memory_gb": 288,
+      "hourly_usd": 5.57
+    },
+    {
+      "key": "mi300x",
+      "name": "AMD MI300X",
+      "memory_gb": 192,
+      "hourly_usd": 1.99
+    },
+    {
+      "key": "mi325x",
+      "name": "AMD MI325X",
+      "memory_gb": 256,
+      "hourly_usd": 2.25
+    },
+    {
+      "key": "mi355x",
+      "name": "AMD MI355X",
+      "memory_gb": 288,
+      "hourly_usd": 5.99
+    }
+  ]
+}

@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Papers & Benchmark Method · DatatalkwithAnkit</title>
-<meta name="description" content="Longer, structured write-ups on LLM inference benchmarking and configuration by Ankit Dongare, each with code and raw data.">
+<title>Studies & Benchmark Method · DatatalkwithAnkit</title>
+<meta name="description" content="Completed capacity studies, downloadable code and results, and a practical method for reproducible LLM inference experiments by Ankit Dongare.">
 <meta name="author" content="Ankit Dongare">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <link rel="canonical" href="https://www.datatalkwithankit.com/papers">
@@ -15,15 +15,15 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="DatatalkwithAnkit">
 <meta property="og:locale" content="en_US">
-<meta property="og:title" content="Papers & Benchmark Method · DatatalkwithAnkit">
-<meta property="og:description" content="Longer, structured write-ups on LLM inference benchmarking and configuration by Ankit Dongare, each with code and raw data.">
+<meta property="og:title" content="Studies & Benchmark Method · DatatalkwithAnkit">
+<meta property="og:description" content="Completed capacity studies, downloadable code and results, and a practical method for reproducible LLM inference experiments by Ankit Dongare.">
 <meta property="og:url" content="https://www.datatalkwithankit.com/papers">
 <meta property="og:image" content="https://www.datatalkwithankit.com/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Papers & Benchmark Method · DatatalkwithAnkit">
-<meta name="twitter:description" content="Longer, structured write-ups on LLM inference benchmarking and configuration by Ankit Dongare, each with code and raw data.">
+<meta name="twitter:title" content="Studies & Benchmark Method · DatatalkwithAnkit">
+<meta name="twitter:description" content="Completed capacity studies, downloadable code and results, and a practical method for reproducible LLM inference experiments by Ankit Dongare.">
 <meta name="twitter:image" content="https://www.datatalkwithankit.com/og-image.png">
 <script>try{if(localStorage.getItem('theme')==='light')document.documentElement.setAttribute('data-theme','light')}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,7 +36,8 @@
 <header class="site-head">
   <div class="wrap head-inner">
     <a class="wordmark" href="/" aria-label="DatatalkwithAnkit, home">Datatalkwith<b>Ankit</b></a>
-    <nav class="nav" aria-label="Main"><a href="/blog">Writing</a><a href="/gpu-guide">GPU guide</a><a href="/papers" aria-current="page">Papers</a><a href="/#projects">Projects</a><a href="/uses">Uses</a><a href="/#contact">Contact</a></nav>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">Menu</button>
+    <nav class="nav" id="main-nav" aria-label="Main"><a href="/blog">Writing</a><a href="/gpu-guide">GPU guide</a><a href="/papers" aria-current="page">Studies</a><a href="/#projects">Projects</a><a href="/uses">Uses</a><a href="/#contact">Contact</a></nav>
       <button class="theme" type="button" aria-label="Switch between light and dark theme">
         <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
         <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2 12h2.2M19.8 12H22M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></svg>
@@ -45,17 +46,20 @@
 </header>
 <main class="wrap">
   <div class="page-head">
-    <h1>Papers</h1>
-    <p>Longer, structured write-ups: reproducible benchmarks, methodology notes, and deep dives on LLM configuration. Each one ships with its code and raw data, and preprints will be cross-posted when they're ready.</p>
+    <h1>Studies &amp; method</h1>
+    <p>Completed work with inspectable inputs, followed by the method I use to plan inference experiments.</p>
   </div>
   <div class="posts">
-    <div class="post-row"><span class="when">Draft</span><div><h3>A practical evaluation framework for LLM inference configurations</h3><p>A structured way to compare serving configurations, including quantization, batching, and context length, across throughput, latency, and cost, with an open-source harness.</p></div><span class="status">In progress</span></div>
-    <div class="post-row"><span class="when">Planned</span><div><h3>Benchmarking vLLM serving parameters on single-GPU deployments</h3><p>An empirical study of vLLM scheduler and memory settings on commodity hardware, mapping concurrency against tail latency and memory headroom.</p></div><span class="status">Planned</span></div>
-    <div class="post-row"><span class="when">Planned</span><div><h3>Notes on reproducibility in LLM benchmarking</h3><p>What an inference benchmark has to report, from hardware and warmup to workload shape and sampling settings, for someone else to reproduce the number.</p></div><span class="status">Planned</span></div>
+<a class="post-row" href="/posts/llm-memory-capacity" data-tags="gpus cost memory quantization benchmarking">
+  <span class="when">Nov 17, 2026</span>
+  <div><h3>What fits in GPU memory? A reproducible capacity study</h3><p>105 calculated scenarios, with the Python script, input configuration, and complete CSV. Capacity estimates, with every assumption visible.</p></div>
+  <span class="status live">Study · 6 min read</span>
+</a>
   </div>
+  <p class="note">The capacity study reports calculated estimates. Future hardware benchmarks will include measured results and the configurations that produced them.</p>
 
   <section class="section" style="border-top:0;padding-bottom:40px" aria-labelledby="method-title">
-    <div class="sec-head"><h2 id="method-title">How I run an experiment</h2><p>The same six steps, every time.</p></div>
+    <div class="sec-head"><h2 id="method-title">How I run an experiment</h2><p>A practical checklist for a reproducible serving experiment.</p></div>
     <ol class="steps">
       <li><h3>Ask one narrow question</h3><p>Something a number can answer, not an opinion.</p></li>
       <li><h3>Fix the setup</h3><p>Same hardware, model, and workload. Warm up properly and record every parameter that could move the result.</p></li>
@@ -75,7 +79,7 @@
   <div class="wrap foot-inner">
     <span>&copy; 2026 Ankit Dongare, Washington, DC</span>
     <nav aria-label="Footer">
-      <a href="/blog">Writing</a><a href="/gpu-guide">GPU guide</a><a href="/papers">Papers</a><a href="/uses">Uses</a>
+      <a href="/blog">Writing</a><a href="/gpu-guide">GPU guide</a><a href="/papers">Studies</a><a href="/uses">Uses</a>
       <a href="/rss.xml">RSS feed</a><a href="https://github.com/Ankycritica">GitHub</a>
     </nav>
   </div>

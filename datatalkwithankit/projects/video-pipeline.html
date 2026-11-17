@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>From a sourced story to a published video · DatatalkwithAnkit</title>
+<meta name="description" content="A project case study of Ankit Dongare's Python video workflow: source checks, narration, rendering, captions, quality checks, and publishing.">
+<meta name="author" content="Ankit Dongare">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+<link rel="canonical" href="https://www.datatalkwithankit.com/projects/video-pipeline">
+<meta name="theme-color" content="#0C0B14">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="alternate" type="application/rss+xml" title="DatatalkwithAnkit" href="/rss.xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="DatatalkwithAnkit">
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="From a sourced story to a published video · DatatalkwithAnkit">
+<meta property="og:description" content="A project case study of Ankit Dongare's Python video workflow: source checks, narration, rendering, captions, quality checks, and publishing.">
+<meta property="og:url" content="https://www.datatalkwithankit.com/projects/video-pipeline">
+<meta property="og:image" content="https://www.datatalkwithankit.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="From a sourced story to a published video · DatatalkwithAnkit">
+<meta name="twitter:description" content="A project case study of Ankit Dongare's Python video workflow: source checks, narration, rendering, captions, quality checks, and publishing.">
+<meta name="twitter:image" content="https://www.datatalkwithankit.com/og-image.png">
+<script>try{if(localStorage.getItem('theme')==='light')document.documentElement.setAttribute('data-theme','light')}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<link rel="stylesheet" href="/style.css">
+<script defer src="/_vercel/insights/script.js"></script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "TechArticle", "headline": "From a sourced story to a published video", "description": "A project case study of Ankit Dongare's Python video workflow: source checks, narration, rendering, captions, quality checks, and publishing.", "datePublished": "2026-11-17", "dateModified": "2026-11-17", "author": {"@type": "Person", "name": "Ankit Dongare", "url": "https://www.datatalkwithankit.com"}, "mainEntityOfPage": "https://www.datatalkwithankit.com/projects/video-pipeline", "image": "https://www.datatalkwithankit.com/og-image.png"}</script>
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.datatalkwithankit.com/"}, {"@type": "ListItem", "position": 2, "name": "From a sourced story to a published video", "item": "https://www.datatalkwithankit.com/projects/video-pipeline"}]}</script>
+</head>
+<body>
+<header class="site-head">
+  <div class="wrap head-inner">
+    <a class="wordmark" href="/" aria-label="DatatalkwithAnkit, home">Datatalkwith<b>Ankit</b></a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">Menu</button>
+    <nav class="nav" id="main-nav" aria-label="Main"><a href="/blog">Writing</a><a href="/gpu-guide">GPU guide</a><a href="/papers">Studies</a><a href="/#projects" aria-current="page">Projects</a><a href="/uses">Uses</a><a href="/#contact">Contact</a></nav>
+      <button class="theme" type="button" aria-label="Switch between light and dark theme">
+        <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2 12h2.2M19.8 12H22M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></svg>
+      </button>
+  </div>
+</header>
+<main class="wrap"><article class="article"><a class="crumb" href="/blog">Back to all writing</a><p class="kicker-line">Project case study</p><h1>From a sourced story to a published video</h1><div class="byline-row"><span class="byline-avatar" aria-hidden="true"><img src="/images/ankit-about.jpg" alt="" width="120" height="150" loading="lazy"></span><div><strong>Ankit Dongare</strong>Nov 17, 2026</div></div><div class="prose">
+<p class="article-intro">A video workflow has a lot of repeated work: choosing a story, checking the script, preparing audio, rendering scenes, adding captions, and publishing the result. I built a Python pipeline to connect those steps.</p>
+<p class="kicker-line">Project case study · Python, FFmpeg, Whisper, YouTube Data API</p>
+<h2>The problem</h2>
+<p>Automating one step is easy. Keeping the whole sequence consistent is harder. A correct script can still produce an unreadable caption, a mismatched visual, or a render that should never reach the upload queue.</p>
+<h2>The workflow</h2>
+<ol class="workflow-list">
+  <li><strong>Source and select.</strong><span>Start with a story supported by identifiable sources. Keep the supporting facts with the script.</span></li>
+  <li><strong>Write and check.</strong><span>Turn those facts into narration, then check the claims before making media.</span></li>
+  <li><strong>Render and caption.</strong><span>Generate narration, build the video with FFmpeg, and align captions with Whisper.</span></li>
+  <li><strong>Review and publish.</strong><span>Check the completed output before passing it to the YouTube publishing workflow.</span></li>
+</ol>
+<h2>Where the engineering matters</h2>
+<p>The useful part is the handoff between stages. Keeping source information, scripts, audio, and rendering outputs organized makes a failed step easier to inspect and repeat. Quality checks belong before publishing, where they can stop a problem from becoming a public video.</p>
+<p>The system handles repetitive production work. Editorial judgment still matters: a functioning render does not tell you whether the story is interesting, the framing is fair, or the video will earn an audience.</p>
+<h2>What this project demonstrates</h2>
+<ul>
+  <li>Orchestrating several media tools in a repeatable Python workflow.</li>
+  <li>Carrying source-backed facts through script and production stages.</li>
+  <li>Connecting rendering, captioning, and a publishing API with review points.</li>
+</ul>
+<p>This case study describes the workflow. The production repository is private, so there is no public source-code download for this project.</p>
+<div class="callout"><p>Want to discuss a similar automation workflow? <a href="/#contact">Send me a note</a>.</p></div>
+</div></article><div class="article-end"><div class="panel article-subscribe"><h2>Get the next write-up</h2><p>Studies, practical tools, and notes on building AI systems.</p><a class="btn solid" href="/#newsletter">Get updates by email</a></div></div></main><footer class="site-foot">
+  <div class="wrap foot-inner">
+    <span>&copy; 2026 Ankit Dongare, Washington, DC</span>
+    <nav aria-label="Footer">
+      <a href="/blog">Writing</a><a href="/gpu-guide">GPU guide</a><a href="/papers">Studies</a><a href="/uses">Uses</a>
+      <a href="/rss.xml">RSS feed</a><a href="https://github.com/Ankycritica">GitHub</a>
+    </nav>
+  </div>
+</footer>
+<script src="/site.js" defer></script>
+</body>
+</html>

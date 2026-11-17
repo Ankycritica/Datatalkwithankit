@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Writing on GPUs & LLM Inference · DatatalkwithAnkit</title>
-<meta name="description" content="Posts on LLM inference, GPUs, serving configs, and cost, by Ankit Dongare. Each one ships with the configs and raw numbers.">
+<meta name="description" content="Posts on LLM inference, GPUs, serving configs, and cost, by Ankit Dongare. Comparisons and reproducible studies with explicit assumptions, source code, and calculated results.">
 <meta name="author" content="Ankit Dongare">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 <link rel="canonical" href="https://www.datatalkwithankit.com/blog">
@@ -16,14 +16,14 @@
 <meta property="og:site_name" content="DatatalkwithAnkit">
 <meta property="og:locale" content="en_US">
 <meta property="og:title" content="Writing on GPUs & LLM Inference · DatatalkwithAnkit">
-<meta property="og:description" content="Posts on LLM inference, GPUs, serving configs, and cost, by Ankit Dongare. Each one ships with the configs and raw numbers.">
+<meta property="og:description" content="Posts on LLM inference, GPUs, serving configs, and cost, by Ankit Dongare. Comparisons and reproducible studies with explicit assumptions, source code, and calculated results.">
 <meta property="og:url" content="https://www.datatalkwithankit.com/blog">
 <meta property="og:image" content="https://www.datatalkwithankit.com/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Writing on GPUs & LLM Inference · DatatalkwithAnkit">
-<meta name="twitter:description" content="Posts on LLM inference, GPUs, serving configs, and cost, by Ankit Dongare. Each one ships with the configs and raw numbers.">
+<meta name="twitter:description" content="Posts on LLM inference, GPUs, serving configs, and cost, by Ankit Dongare. Comparisons and reproducible studies with explicit assumptions, source code, and calculated results.">
 <meta name="twitter:image" content="https://www.datatalkwithankit.com/og-image.png">
 <script>try{if(localStorage.getItem('theme')==='light')document.documentElement.setAttribute('data-theme','light')}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,7 +36,8 @@
 <header class="site-head">
   <div class="wrap head-inner">
     <a class="wordmark" href="/" aria-label="DatatalkwithAnkit, home">Datatalkwith<b>Ankit</b></a>
-    <nav class="nav" aria-label="Main"><a href="/blog" aria-current="page">Writing</a><a href="/gpu-guide">GPU guide</a><a href="/papers">Papers</a><a href="/#projects">Projects</a><a href="/uses">Uses</a><a href="/#contact">Contact</a></nav>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">Menu</button>
+    <nav class="nav" id="main-nav" aria-label="Main"><a href="/blog" aria-current="page">Writing</a><a href="/gpu-guide">GPU guide</a><a href="/papers">Studies</a><a href="/#projects">Projects</a><a href="/uses">Uses</a><a href="/#contact">Contact</a></nav>
       <button class="theme" type="button" aria-label="Switch between light and dark theme">
         <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
         <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2 12h2.2M19.8 12H22M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></svg>
@@ -59,8 +60,13 @@
     <button type="button" data-tag="automation" aria-pressed="false">Automation</button>
   </div>
   <div class="posts">
+<a class="post-row" href="/posts/llm-memory-capacity" data-tags="gpus cost memory quantization benchmarking">
+  <span class="when">Nov 17, 2026</span>
+  <div><h3>What fits in GPU memory? A reproducible capacity study</h3><p>105 calculated scenarios, with the Python script, input configuration, and complete CSV. Capacity estimates, with every assumption visible.</p></div>
+  <span class="status live">Study · 6 min read</span>
+</a>
 <a class="post-row" href="/gpu-guide" data-tags="gpus cost memory">
-  <span class="when">Updated Oct 12, 2026</span>
+  <span class="when">Updated Nov 9, 2026</span>
   <div><h3>Which GPU should you rent for LLM inference?</h3><p>H100, H200, B200, B300, MI300X, MI325X and MI355X compared: memory, bandwidth, GPUs per model, and price. Updated every quarter.</p></div>
   <span class="status live">Guide</span>
 </a>
@@ -69,31 +75,11 @@
   <div><h3>H200 vs MI300X: what you're actually paying for</h3><p>Memory, interconnect, and price compared. What the extra 51 GB buys, why PCIe vs NVLink decides multi-GPU scaling, and what a GPU-hour really costs.</p></div>
   <span class="status live">9 min read</span>
 </a>
-<div class="post-row" data-tags="quantization benchmarking">
-  <span class="when">Coming soon</span>
-  <div><h3>Quantization in practice: quality vs. cost on consumer GPUs</h3><p>What happens to output quality and tokens per second going from FP16 to INT8 and INT4, measured on real prompts.</p></div>
-  <span class="status">In progress</span>
-</div>
-<div class="post-row" data-tags="vllm benchmarking">
-  <span class="when">Coming soon</span>
-  <div><h3>How batch size changes vLLM throughput</h3><p>A single-GPU sweep of max_num_seqs, measuring tokens per second against p50 and p95 latency.</p></div>
-  <span class="status">In progress</span>
-</div>
-<div class="post-row" data-tags="vllm memory">
-  <span class="when">Coming soon</span>
-  <div><h3>KV cache is the real memory budget</h3><p>Why context length, not parameter count, usually decides how many users one GPU can hold.</p></div>
-  <span class="status">In progress</span>
-</div>
-<div class="post-row" data-tags="cost">
-  <span class="when">Coming soon</span>
-  <div><h3>Cost per million tokens: self-hosted vs. API</h3><p>A break-even analysis including the costs people forget: idle GPU time, operations, and engineering hours.</p></div>
-  <span class="status">In progress</span>
-</div>
-<div class="post-row" data-tags="automation">
-  <span class="when">Coming soon</span>
-  <div><h3>Building a fully automated YouTube pipeline in Python</h3><p>Agents orchestrating FFmpeg, Whisper captions, loudness normalization, and scheduled uploads.</p></div>
-  <span class="status">In progress</span>
-</div>
+<a class="post-row" href="/projects/video-pipeline" data-tags="automation">
+  <span class="when">Project case study</span>
+  <div><h3>From a sourced story to a published video</h3><p>Connecting narration, rendering, captions, checks, and publishing in a Python workflow.</p></div>
+  <span class="status live">3 min read</span>
+</a>
   </div>
   <p id="empty" class="note" hidden>No posts on that topic yet. Pick another, or <a class="link" href="/#newsletter">subscribe</a> to hear when one lands.</p>
   <div class="panel" style="margin:56px 0 72px">
@@ -106,7 +92,7 @@
   <div class="wrap foot-inner">
     <span>&copy; 2026 Ankit Dongare, Washington, DC</span>
     <nav aria-label="Footer">
-      <a href="/blog">Writing</a><a href="/gpu-guide">GPU guide</a><a href="/papers">Papers</a><a href="/uses">Uses</a>
+      <a href="/blog">Writing</a><a href="/gpu-guide">GPU guide</a><a href="/papers">Studies</a><a href="/uses">Uses</a>
       <a href="/rss.xml">RSS feed</a><a href="https://github.com/Ankycritica">GitHub</a>
     </nav>
   </div>

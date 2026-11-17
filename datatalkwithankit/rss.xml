@@ -5,8 +5,22 @@
     <link>https://www.datatalkwithankit.com</link>
     <description>LLM inference benchmarks, GPUs, serving configs, and cost, by Ankit Dongare.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 12 Oct 2026 09:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 17 Nov 2026 16:00:00 GMT</lastBuildDate>
     <atom:link href="https://www.datatalkwithankit.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>What fits in GPU memory? A reproducible capacity study</title>
+      <link>https://www.datatalkwithankit.com/posts/llm-memory-capacity</link>
+      <guid isPermaLink="true">https://www.datatalkwithankit.com/posts/llm-memory-capacity</guid>
+      <description>A transparent LLM memory-planning study: five model sizes, three weight precisions, seven GPUs, and 105 calculated scenarios. Download the Python, inputs, and CSV.</description>
+      <pubDate>Tue, 17 Nov 2026 16:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>From a sourced story to a published video</title>
+      <link>https://www.datatalkwithankit.com/projects/video-pipeline</link>
+      <guid isPermaLink="true">https://www.datatalkwithankit.com/projects/video-pipeline</guid>
+      <description>A project case study of Ankit Dongare's Python video workflow: source checks, narration, rendering, captions, quality checks, and publishing.</description>
+      <pubDate>Tue, 17 Nov 2026 16:00:00 GMT</pubDate>
+    </item>
     <item>
       <title>Which GPU should you rent for LLM inference?</title>
       <link>https://www.datatalkwithankit.com/gpu-guide</link>

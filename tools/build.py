@@ -1,4 +1,7 @@
-import json, os
+import json, os, shutil
+from memory_study import write_results, scenarios
+from content import STUDY_TITLE, STUDY_DESC, STUDY_BODY, PIPELINE_TITLE, PIPELINE_DESC, PIPELINE_BODY
+CONTENT_DATE = "2026-11-17"
 OUT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "datatalkwithankit"))  # site folder Vercel deploys
 SITE = "https://www.datatalkwithankit.com"
 FONTS = "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap"
@@ -44,7 +47,7 @@ def head(title, desc, path, og_image="/og-image.png", og_type="website", extra="
 <body>
 """
 
-NAV = [("Writing", "/blog"), ("GPU guide", "/gpu-guide"), ("Papers", "/papers"), ("Projects", "/#projects"), ("Uses", "/uses"), ("Contact", "/#contact")]
+NAV = [("Writing", "/blog"), ("GPU guide", "/gpu-guide"), ("Studies", "/papers"), ("Projects", "/#projects"), ("Uses", "/uses"), ("Contact", "/#contact")]
 
 def header(active=""):
     links = "".join(
@@ -52,7 +55,8 @@ def header(active=""):
     return f"""<header class="site-head">
   <div class="wrap head-inner">
     <a class="wordmark" href="/" aria-label="DatatalkwithAnkit, home">Datatalkwith<b>Ankit</b></a>
-    <nav class="nav" aria-label="Main">{links}</nav>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">Menu</button>
+    <nav class="nav" id="main-nav" aria-label="Main">{links}</nav>
       <button class="theme" type="button" aria-label="Switch between light and dark theme">
         <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
         <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2 12h2.2M19.8 12H22M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></svg>
@@ -65,7 +69,7 @@ FOOTER = """<footer class="site-foot">
   <div class="wrap foot-inner">
     <span>&copy; 2026 Ankit Dongare, Washington, DC</span>
     <nav aria-label="Footer">
-      <a href="/blog">Writing</a><a href="/gpu-guide">GPU guide</a><a href="/papers">Papers</a><a href="/uses">Uses</a>
+      <a href="/blog">Writing</a><a href="/gpu-guide">GPU guide</a><a href="/papers">Studies</a><a href="/uses">Uses</a>
       <a href="/rss.xml">RSS feed</a><a href="https://github.com/Ankycritica">GitHub</a>
     </nav>
   </div>
@@ -121,35 +125,6 @@ def crumbs(name, path):
 def ld(obj):
     return '<script type="application/ld+json">' + json.dumps(obj, ensure_ascii=False) + "</script>\n"
 
-UPCOMING = [
-    ("Quantization in practice: quality vs. cost on consumer GPUs",
-     "What happens to output quality and tokens per second going from FP16 to INT8 and INT4, measured on real prompts.",
-     "quantization benchmarking"),
-    ("How batch size changes vLLM throughput",
-     "A single-GPU sweep of max_num_seqs, measuring tokens per second against p50 and p95 latency.",
-     "vllm benchmarking"),
-    ("KV cache is the real memory budget",
-     "Why context length, not parameter count, usually decides how many users one GPU can hold.",
-     "vllm memory"),
-    ("Cost per million tokens: self-hosted vs. API",
-     "A break-even analysis including the costs people forget: idle GPU time, operations, and engineering hours.",
-     "cost"),
-    ("Building a fully automated YouTube pipeline in Python",
-     "Agents orchestrating FFmpeg, Whisper captions, loudness normalization, and scheduled uploads.",
-     "automation"),
-]
-
-def upcoming_rows(limit=None):
-    out = ""
-    for t, d, tags in (UPCOMING[:limit] if limit else UPCOMING):
-        out += f"""<div class="post-row" data-tags="{tags}">
-  <span class="when">Coming soon</span>
-  <div><h3>{t}</h3><p>{d}</p></div>
-  <span class="status">In progress</span>
-</div>
-"""
-    return out
-
 H200_ROW = """<a class="post-row" href="/posts/h200-vs-mi300x" data-tags="gpus cost memory benchmarking">
   <span class="when">Aug 21, 2026</span>
   <div><h3>H200 vs MI300X: what you're actually paying for</h3><p>Memory, interconnect, and price compared. What the extra 51 GB buys, why PCIe vs NVLink decides multi-GPU scaling, and what a GPU-hour really costs.</p></div>
@@ -158,9 +133,22 @@ H200_ROW = """<a class="post-row" href="/posts/h200-vs-mi300x" data-tags="gpus c
 """
 
 GUIDE_ROW = """<a class="post-row" href="/gpu-guide" data-tags="gpus cost memory">
-  <span class="when">Updated Oct 12, 2026</span>
+  <span class="when">Updated """ + PRICE_DATE + """</span>
   <div><h3>Which GPU should you rent for LLM inference?</h3><p>H100, H200, B200, B300, MI300X, MI325X and MI355X compared: memory, bandwidth, GPUs per model, and price. Updated every quarter.</p></div>
   <span class="status live">Guide</span>
+</a>
+"""
+
+STUDY_ROW = """<a class="post-row" href="/posts/llm-memory-capacity" data-tags="gpus cost memory quantization benchmarking">
+  <span class="when">Nov 17, 2026</span>
+  <div><h3>What fits in GPU memory? A reproducible capacity study</h3><p>105 calculated scenarios, with the Python script, input configuration, and complete CSV. Capacity estimates, with every assumption visible.</p></div>
+  <span class="status live">Study · 6 min read</span>
+</a>
+"""
+PIPELINE_ROW = """<a class="post-row" href="/projects/video-pipeline" data-tags="automation">
+  <span class="when">Project case study</span>
+  <div><h3>From a sourced story to a published video</h3><p>Connecting narration, rendering, captions, checks, and publishing in a Python workflow.</p></div>
+  <span class="status live">3 min read</span>
 </a>
 """
 
@@ -175,14 +163,15 @@ home += """<main>
     <div>
       <p class="hero-who">Ankit Dongare, AI engineer</p>
       <h1>I measure what language models cost to run.</h1>
-      <p class="hero-lede">I benchmark LLM inference: GPUs, serving configs, throughput, and price. When I run a benchmark, I publish the configs with it so you can rerun it and check my numbers.</p>
+      <p class="hero-lede">I work on LLM inference: GPUs, serving configs, throughput, and price. Here I share comparisons, practical tools, and reproducible studies with the assumptions and inputs behind the numbers.</p>
       <div class="hero-actions">
-        <a class="btn solid" href="/posts/h200-vs-mi300x">Read the latest post</a>
-        <a class="btn" href="#contact">Get new posts by email</a>
+        <a class="btn solid" href="/posts/llm-memory-capacity">Read the memory study</a>
+        <a class="btn" href="#newsletter">Get new posts by email</a>
       </div>
-      <div class="latest">
-        <span>Latest</span>
-        <a href="/posts/h200-vs-mi300x">H200 vs MI300X: what you're actually paying for</a>
+      <div class="hero-links" aria-label="Explore the site">
+        <a href="#fit-section">Capacity calculator <span aria-hidden="true">&rarr;</span></a>
+        <a href="/gpu-guide">GPU guide <span aria-hidden="true">&rarr;</span></a>
+        <a href="#projects">Selected projects <span aria-hidden="true">&rarr;</span></a>
       </div>
     </div>
     <aside class="board" aria-labelledby="board-title">
@@ -195,40 +184,11 @@ home += """<main>
   </div>
 </section>
 
-<section class="section start" aria-labelledby="start-title">
-  <div class="wrap">
-    <div class="sec-head">
-      <h2 id="start-title">Start here</h2>
-      <p>New to the site? These three are the best way in.</p>
-    </div>
-    <div class="start-grid">
-      <a class="start-card" href="/gpu-guide">
-        <span class="kicker">Guide, updated quarterly</span>
-        <h3>Which GPU should you rent for LLM inference?</h3>
-        <p>Seven current GPUs compared: memory, bandwidth, GPUs per model, and price. Kept current.</p>
-        <span class="go">Read the guide</span>
-      </a>
-      <a class="start-card" href="/posts/h200-vs-mi300x">
-        <span class="kicker">Deep dive</span>
-        <h3>H200 vs MI300X: what you're actually paying for</h3>
-        <p>Memory, NVLink vs PCIe, and real neocloud prices, compared.</p>
-        <span class="go">Read the post</span>
-      </a>
-      <a class="start-card" href="#fit-section">
-        <span class="kicker">Tool</span>
-        <h3>Will your model fit?</h3>
-        <p>Pick a model size and precision. See GPUs needed and the hourly cost.</p>
-        <span class="go">Try the calculator</span>
-      </a>
-    </div>
-  </div>
-</section>
-
 <section class="section" id="fit-section" aria-labelledby="fit-title">
   <div class="wrap">
     <div class="sec-head">
       <h2 id="fit-title">Will your model fit?</h2>
-      <p>Pick a model size and precision to see how many GPUs it takes on seven current data-center GPUs, and what that costs per hour.</p>
+      <p>Choose a model size and weight precision. Compare the three lowest estimated hourly costs, or expand to all seven GPUs.</p>
     </div>
     <div class="fit" id="fit">
       <div class="fit-controls">
@@ -243,7 +203,7 @@ home += """<main>
           </div>
         </div>
         <div>
-          <span class="ctl-label" id="lbl-prec">Precision</span>
+          <span class="ctl-label" id="lbl-prec">Weight precision</span>
           <div class="seg" id="fit-prec" role="group" aria-labelledby="lbl-prec">
             <button type="button" data-v="fp16" aria-pressed="true">FP16</button>
             <button type="button" data-v="fp8" aria-pressed="false">FP8</button>
@@ -251,10 +211,16 @@ home += """<main>
           </div>
         </div>
       </div>
-      <p class="fit-need" id="fit-need" aria-live="polite"></p>
-""" + FIT_ROWS + """      <div class="fit-foot">
-        <p id="fit-best" aria-live="polite"></p>
-        <p>Rough estimate. GPU counts round up to 1, 2, 4 or 8, since tensor parallelism splits a model evenly. Prices are the lowest listed on-demand rate per GPU-hour on getdeploying.com, """ + PRICE_DATE + """; some offers may not be in stock. <a class="link" href="/gpu-guide">Full GPU guide</a></p>
+      <div class="fit-summary">
+        <p class="fit-need" id="fit-need" aria-live="polite"></p>
+        <p class="fit-best" id="fit-best" aria-live="polite"></p>
+      </div>
+      <div id="fit-results">
+""" + FIT_ROWS + """      </div>
+      <button class="btn fit-toggle" id="fit-toggle" type="button" aria-expanded="false" aria-controls="fit-results" hidden>Show all 7 GPUs</button>
+      <div class="fit-foot">
+        <p>Capacity estimates, using a 20% runtime allowance and power-of-two GPU counts. Actual fit depends on the model and workload. <a class="link" href="/posts/llm-memory-capacity">Method, code, and results</a>.</p>
+        <p>Prices: <a class="link" href="https://getdeploying.com">getdeploying.com</a>, """ + PRICE_DATE + """. Listed on-demand rates; availability and node minimums vary.</p>
       </div>
     </div>
   </div>
@@ -263,25 +229,27 @@ home += """<main>
 <section class="section" id="writing" aria-labelledby="writing-title">
   <div class="wrap">
     <div class="sec-head">
-      <h2 id="writing-title">Writing</h2>
-      <p>GPU comparisons, inference benchmarks, and notes on the AI market. Posts go up when the work is done.</p>
+      <h2 id="writing-title">Writing &amp; studies</h2>
+      <p>Finished work you can read, inspect, and use.</p>
     </div>
-    <a class="feature" href="/posts/h200-vs-mi300x">
+    <a class="feature" href="/posts/llm-memory-capacity">
       <div>
-        <p class="kicker">Latest post</p>
-        <h3>H200 vs MI300X: what you're actually paying for</h3>
-        <p>AMD sells memory, NVIDIA sells interconnect and a software stack that already works. Which is the better buy depends on whether your problem is fitting the model or making many GPUs act like one.</p>
-        <p class="byline">Aug 21, 2026, 9 minute read</p>
+        <p class="kicker">New study · Code + inputs + results</p>
+        <h3>What fits in GPU memory?</h3>
+        <p>Five model sizes, three weight precisions, seven GPUs. A reproducible worksheet for the capacity question behind every rental decision.</p>
+        <p class="byline">Nov 17, 2026 · Calculated estimates · 6 min read</p>
       </div>
-      <div class="mini-chart" aria-label="Memory per GPU: H200 141 GB, MI300X 192 GB">
-        <div class="mc-row"><b>H200</b><div class="mc-track"><div class="mc-fill v" style="width:73%"></div></div><span>141 GB</span></div>
-        <div class="mc-row"><b>MI300X</b><div class="mc-track"><div class="mc-fill c" style="width:100%"></div></div><span>192 GB</span></div>
-        <p class="mc-cap">Memory per GPU</p>
+      <div class="study-preview" aria-label="70B model memory estimates: FP16 168 GB, FP8 84 GB, INT4 42 GB">
+        <span class="chart-eyebrow">70B model · Memory budget</span>
+        <div><b>FP16</b><span class="preview-track"><i style="width:100%"></i></span><strong>168 GB</strong></div>
+        <div><b>FP8</b><span class="preview-track"><i style="width:50%"></i></span><strong>84 GB</strong></div>
+        <div><b>INT4</b><span class="preview-track"><i style="width:25%"></i></span><strong>42 GB</strong></div>
+        <small>Weights + 20% planning allowance</small>
       </div>
     </a>
     <div class="posts">
-""" + upcoming_rows(3) + """    </div>
-    <p class="more"><a class="link" href="/blog">See everything I'm writing</a></p>
+""" + GUIDE_ROW + H200_ROW + """    </div>
+    <p class="more"><a class="link" href="/blog">Browse all writing</a></p>
   </div>
 </section>
 
@@ -291,37 +259,38 @@ home += """<main>
       <h2 id="projects-title">Projects</h2>
       <p>Things I've built and run. More on <a class="link" href="https://github.com/Ankycritica">GitHub</a>.</p>
     </div>
-    <div class="aurapal">
-      <div>
-        <p class="kicker">My product</p>
-        <h3>Aurapal</h3>
-        <p>A career platform I design, build, and run end to end. It's where my engineering, automation, and product work come together.</p>
-        <a class="btn solid" href="https://aurapal.org">Visit aurapal.org</a>
-      </div>
-      <ul>
-        <li><strong>Built solo</strong>From design and code to deployment and support.</li>
-        <li><strong>Automation-first</strong>Repetitive work is scripted, so the time goes into the product.</li>
-        <li><strong>Live</strong>Running in production at aurapal.org.</li>
-      </ul>
+    <div class="project-grid">
+      <article class="project-card">
+        <a class="project-shot" href="https://www.aurapal.org/" aria-label="Visit AuraPal">
+          <span class="browser-bar" aria-hidden="true"><i></i><i></i><i></i><span>aurapal.org</span></span>
+          <img src="/images/aurapal-project.jpg" alt="AuraPal's live career-tools homepage with resume tools and a salary comparison" width="1350" height="926" loading="lazy">
+        </a>
+        <div class="project-body">
+          <p class="kicker">My product · Live</p><h3>AuraPal</h3>
+          <p>An AI career platform I design, build, and run. From resumes to interview preparation, the focus is turning a complex task into a useful result.</p>
+          <a class="link" href="https://www.aurapal.org/">Explore AuraPal <span aria-hidden="true">&rarr;</span></a>
+        </div>
+      </article>
+      <article class="project-card">
+        <a class="project-shot" href="https://ewg-jade.vercel.app/" aria-label="Visit EWG Solutions">
+          <span class="browser-bar" aria-hidden="true"><i></i><i></i><i></i><span>EWG Solutions</span></span>
+          <img src="/images/ewg-project.jpg" alt="EWG Solutions' live white-glove logistics website in black and gold" width="1350" height="926" loading="lazy">
+        </a>
+        <div class="project-body">
+          <p class="kicker">Client website · Live</p><h3>Elite White Glove</h3>
+          <p>A service website for a logistics business, with clear service pages and a direct path from learning about the company to requesting a quote.</p>
+          <div class="project-links"><a class="link" href="https://ewg-jade.vercel.app/">Visit website <span aria-hidden="true">&rarr;</span></a><a class="link" href="https://github.com/Ankycritica/EWG">View source</a></div>
+        </div>
+      </article>
     </div>
     <div class="proj">
-      <h3>Automated YouTube pipeline</h3>
-      <div><p>Generates, renders, captions, and publishes videos with almost no manual steps.</p><span class="tech">Python, FFmpeg, Whisper, YouTube Data API</span></div>
-      <a class="link" href="https://github.com/Ankycritica">View on GitHub</a>
-    </div>
-    <div class="proj">
-      <h3>LLM inference benchmarks</h3>
-      <div><p>An ongoing series on how batch size, quantization, and context length change throughput, latency, and cost.</p><span class="tech">vLLM, PyTorch, Python</span></div>
-      <a class="link" href="/blog">Read the series</a>
-    </div>
-    <div class="proj">
-      <h3>EWG, Elite White Glove</h3>
-      <div><p>A conversion-focused website for a white-glove service business, from design to deployment.</p><span class="tech">HTML, CSS, Vercel</span></div>
-      <a class="link" href="https://github.com/Ankycritica/EWG">View source</a>
+      <h3>Video publishing workflow</h3>
+      <div><p>A Python workflow connecting source checks, narration, rendering, captions, and publishing.</p><span class="tech">Python, FFmpeg, Whisper, YouTube Data API</span></div>
+      <a class="link" href="/projects/video-pipeline">Read case study</a>
     </div>
     <div class="proj">
       <h3>HNH Handyman</h3>
-      <div><p>A booking-focused web app for a handyman service, with a typed, maintainable codebase.</p><span class="tech">TypeScript</span></div>
+      <div><p>A service and booking website for a local handyman business.</p><span class="tech">TypeScript · <a class="link" href="https://hnh-handyman-liart.vercel.app/">Visit website</a></span></div>
       <a class="link" href="https://github.com/Ankycritica/hnhHandyman">View source</a>
     </div>
   </div>
@@ -332,12 +301,16 @@ home += """<main>
     <div class="sec-head"><h2 id="about-title">About</h2></div>
     <div class="about-grid">
       <div class="about-text">
-        <p>I started as a data analyst turning messy tables into answers, and kept following the harder questions until they led to building AI systems full time.</p>
+        <p>I’m Ankit, an AI engineer based in the Washington, DC area. I started with data analytics and kept following the harder questions until they led to building AI systems full time.</p>
         <p>Today I work on the practical side of large language models: how they're served, how fast they run, what they cost, and how configuration choices change all three. At work I benchmark and evaluate an enterprise LLM inference platform, measuring throughput, latency, and cost across models, serving configs, and hardware.</p>
         <p>That data background still shapes how I work. I trust measurements over opinions, and if I do something twice, I write a script for it.</p>
         <p class="stack-line">Day to day: Python, PyTorch, vLLM, Hugging Face, Docker, and AWS. The full list is on the <a class="link" href="/uses">uses page</a>.</p>
       </div>
-      <div>
+      <div class="about-person">
+        <figure class="about-portrait">
+          <img src="/images/ankit-about.jpg" alt="Ankit Dongare in Washington, DC" width="1000" height="1250" loading="lazy">
+          <figcaption>Ankit Dongare <span>AI engineer · Builder</span></figcaption>
+        </figure>
         <ul class="creds">
           <li><strong>Inference benchmarking</strong>Evaluating an enterprise LLM inference platform at work</li>
           <li><strong>Product builder</strong>Designs, ships, and runs <a class="link" href="https://aurapal.org">Aurapal</a> in production</li>
@@ -357,13 +330,13 @@ home += """<main>
     <div class="connect">
       <div class="panel" id="newsletter">
         <h2>The newsletter</h2>
-        <p>New benchmarks and write-ups, sent when they're published. No schedule and no filler. Unsubscribe any time.</p>
+        <p>New studies and write-ups, sent when they're published. Request updates by email, or follow the RSS feed.</p>
         <form id="subscribe" class="inline-form" novalidate>
           <label class="sr-only" for="sub-email">Email address</label>
           <input id="sub-email" type="email" placeholder="you@example.com" autocomplete="email">
-          <button class="btn solid" type="submit">Subscribe</button>
+          <button class="btn solid" type="submit">Request updates</button>
         </form>
-        <p class="note">Signups come straight to me while the list is small.</p>
+        <p class="note">Opens your email app with a signup request for you to send.</p>
         <div class="socials">
           <a href="https://youtube.com/@datatalkwithankit">YouTube</a>
           <a href="https://instagram.com/datatalkwithankit">Instagram</a>
@@ -377,7 +350,7 @@ home += """<main>
         <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email"></label>
         <label class="field"><span>Message</span><textarea name="message" rows="4"></textarea></label>
         <button class="btn solid" type="submit">Send message</button>
-        <p class="note">I usually reply within two days. Or email <a class="link" href="mailto:dongare.ankit29@gmail.com">dongare.ankit29@gmail.com</a>.</p>
+        <p class="note">Opens your email app. I usually reply within two days. Or email <a class="link" href="mailto:dongare.ankit29@gmail.com">dongare.ankit29@gmail.com</a>.</p>
       </form>
     </div>
   </div>
@@ -389,7 +362,7 @@ open(os.path.join(OUT, "index.html"), "w").write(home)
 
 # ======================= BLOG =======================
 blog = head("Writing on GPUs & LLM Inference · DatatalkwithAnkit",
-            "Posts on LLM inference, GPUs, serving configs, and cost, by Ankit Dongare. Each one ships with the configs and raw numbers.",
+            "Posts on LLM inference, GPUs, serving configs, and cost, by Ankit Dongare. Comparisons and reproducible studies with explicit assumptions, source code, and calculated results.",
             "/blog")
 blog += header("Writing")
 blog += """<main class="wrap">
@@ -408,7 +381,7 @@ blog += """<main class="wrap">
     <button type="button" data-tag="automation" aria-pressed="false">Automation</button>
   </div>
   <div class="posts">
-""" + GUIDE_ROW + H200_ROW + upcoming_rows() + """  </div>
+""" + STUDY_ROW + GUIDE_ROW + H200_ROW + PIPELINE_ROW + """  </div>
   <p id="empty" class="note" hidden>No posts on that topic yet. Pick another, or <a class="link" href="/#newsletter">subscribe</a> to hear when one lands.</p>
   <div class="panel" style="margin:56px 0 72px">
     <h2>Get new posts by email</h2>
@@ -421,23 +394,21 @@ blog += FOOTER
 open(os.path.join(OUT, "blog.html"), "w").write(blog)
 
 # ======================= PAPERS =======================
-papers = head("Papers & Benchmark Method · DatatalkwithAnkit",
-              "Longer, structured write-ups on LLM inference benchmarking and configuration by Ankit Dongare, each with code and raw data.",
+papers = head("Studies & Benchmark Method · DatatalkwithAnkit",
+              "Completed capacity studies, downloadable code and results, and a practical method for reproducible LLM inference experiments by Ankit Dongare.",
               "/papers")
-papers += header("Papers")
+papers += header("Studies")
 papers += """<main class="wrap">
   <div class="page-head">
-    <h1>Papers</h1>
-    <p>Longer, structured write-ups: reproducible benchmarks, methodology notes, and deep dives on LLM configuration. Each one ships with its code and raw data, and preprints will be cross-posted when they're ready.</p>
+    <h1>Studies &amp; method</h1>
+    <p>Completed work with inspectable inputs, followed by the method I use to plan inference experiments.</p>
   </div>
   <div class="posts">
-    <div class="post-row"><span class="when">Draft</span><div><h3>A practical evaluation framework for LLM inference configurations</h3><p>A structured way to compare serving configurations, including quantization, batching, and context length, across throughput, latency, and cost, with an open-source harness.</p></div><span class="status">In progress</span></div>
-    <div class="post-row"><span class="when">Planned</span><div><h3>Benchmarking vLLM serving parameters on single-GPU deployments</h3><p>An empirical study of vLLM scheduler and memory settings on commodity hardware, mapping concurrency against tail latency and memory headroom.</p></div><span class="status">Planned</span></div>
-    <div class="post-row"><span class="when">Planned</span><div><h3>Notes on reproducibility in LLM benchmarking</h3><p>What an inference benchmark has to report, from hardware and warmup to workload shape and sampling settings, for someone else to reproduce the number.</p></div><span class="status">Planned</span></div>
-  </div>
+""" + STUDY_ROW + """  </div>
+  <p class="note">The capacity study reports calculated estimates. Future hardware benchmarks will include measured results and the configurations that produced them.</p>
 
   <section class="section" style="border-top:0;padding-bottom:40px" aria-labelledby="method-title">
-    <div class="sec-head"><h2 id="method-title">How I run an experiment</h2><p>The same six steps, every time.</p></div>
+    <div class="sec-head"><h2 id="method-title">How I run an experiment</h2><p>A practical checklist for a reproducible serving experiment.</p></div>
     <ol class="steps">
       <li><h3>Ask one narrow question</h3><p>Something a number can answer, not an opinion.</p></li>
       <li><h3>Fix the setup</h3><p>Same hardware, model, and workload. Warm up properly and record every parameter that could move the result.</p></li>
@@ -499,7 +470,7 @@ post += """<main class="wrap">
   <a class="crumb" href="/blog">Back to all writing</a>
   <h1>H200 vs MI300X: what you're actually paying for</h1>
   <div class="byline-row">
-    <span class="avatar" aria-hidden="true">AD</span>
+    <span class="byline-avatar" aria-hidden="true"><img src="/images/ankit-about.jpg" alt="" width="120" height="150" loading="lazy"></span>
     <div><strong>Ankit Dongare</strong>Aug 21, 2026, 9 minute read</div>
   </div>
   <div class="prose">
@@ -582,7 +553,7 @@ post += """<main class="wrap">
     <p>I'd reach for the MI300X when the model fits in 192 GB but not 141 GB, when I'm serving long contexts where KV cache dominates, when the stack is already vLLM or SGLang on ROCm, and when cost per gigabyte matters more than shaving the last few milliseconds.</p>
     <p>I'd reach for the H200 when I'm doing tensor parallelism at four or eight GPUs, when I depend on CUDA-specific kernels, when latency consistency is a product requirement rather than a nice-to-have, or when I'm training rather than serving.</p>
     <p>Reduced to one line: AMD sells memory, NVIDIA sells interconnect and a software stack that already works. Which is the better buy depends on whether your problem is fitting the model or making a pile of GPUs behave like one.</p>
-    <p>I'd rather measure this than argue about it, so the next post is a real batch-size sweep on a single GPU with the configs published. If a number here is wrong or has gone stale, <a href="/#contact">tell me</a> and I'll fix it.</p>
+    <p>For the capacity calculation behind these choices, see the <a href="/posts/llm-memory-capacity">reproducible memory study</a>, with code, inputs, and calculated results. If a number here is wrong or has gone stale, <a href="/#contact">tell me</a> and I'll fix it.</p>
     <p style="color:var(--muted);font-size:.95rem"><em>Figures checked August 2026. GPU pricing moves fast, so check current rates before deciding anything on them.</em></p>
   </div>
   <div class="share">
@@ -595,7 +566,7 @@ post += """<main class="wrap">
 <div class="article-end">
   <div class="panel" style="margin:24px 0 72px">
     <h2>Get the next one by email</h2>
-    <p>The batch-size sweep is next, with every config published. Subscribe and it'll land in your inbox.</p>
+    <p>New studies and practical notes, with the assumptions and inputs behind the numbers.</p>
     <a class="btn solid" href="/#newsletter">Subscribe</a>
   </div>
 </div>
@@ -668,7 +639,7 @@ guide += """<main class="wrap">
   <p class="kicker-line">Living guide &middot; Last updated """ + PRICE_DATE + """</p>
   <h1>Which GPU should you rent for LLM inference?</h1>
   <div class="byline-row">
-    <span class="avatar" aria-hidden="true">AD</span>
+    <span class="byline-avatar" aria-hidden="true"><img src="/images/ankit-about.jpg" alt="" width="120" height="150" loading="lazy"></span>
     <div><strong>Ankit Dongare</strong>Covers 7 data-center GPUs. Updated every quarter.</div>
   </div>
   <div class="prose">
@@ -782,6 +753,57 @@ guide += """<main class="wrap">
 guide += FOOTER
 open(os.path.join(OUT, "gpu-guide.html"), "w").write(guide)
 
+# ======================= REPRODUCIBLE STUDY + CASE STUDY =======================
+DOWNLOADS = os.path.join(OUT, "downloads")
+os.makedirs(DOWNLOADS, exist_ok=True)
+os.makedirs(os.path.join(OUT, "projects"), exist_ok=True)
+STUDY_CONFIG = {
+    "description": "Calculated memory capacity and dated rental-cost scenarios; not a hardware benchmark.",
+    "memory_units": "decimal GB",
+    "headroom_fraction": 0.2,
+    "candidate_gpu_counts": "Powers of two; a planning convention, not a guarantee of model parallelism support.",
+    "model_billions": [8, 32, 70, 123, 405],
+    "bytes_per_parameter": {"FP16": 2, "FP8": 1, "INT4": 0.5},
+    "price_date": PRICE_DATE_ISO,
+    "price_source": "https://getdeploying.com",
+    "gpus": [{"key": k, "name": n, "memory_gb": m, "hourly_usd": r} for k, v, n, m, mt, bw, ic, sw, r in GPUS],
+}
+open(os.path.join(DOWNLOADS, "memory-study-config.json"), "w").write(json.dumps(STUDY_CONFIG, indent=2) + "\n")
+shutil.copyfile(os.path.join(os.path.dirname(__file__), "memory_study.py"), os.path.join(DOWNLOADS, "memory-study.py"))
+with open(os.path.join(DOWNLOADS, "memory-study-results.csv"), "w", newline="") as stream:
+    write_results(STUDY_CONFIG, stream)
+
+study_rows = list(scenarios(STUDY_CONFIG))
+chart = '<figure class="figure capacity-chart"><div class="chart-legend"><span><i class="legend-weights"></i>Weights</span><span><i class="legend-headroom"></i>Planning allowance</span></div>'
+for precision in STUDY_CONFIG["bytes_per_parameter"]:
+    row = next(r for r in study_rows if r["model_billions"] == 70 and r["precision"] == precision)
+    weights, allowance, total = (float(row[k]) for k in ("weights_gb", "headroom_gb", "total_gb"))
+    chart += f'<div class="capacity-row"><b>{precision}</b><span class="capacity-track"><i class="capacity-weight" style="width:{weights/168*100:.4f}%"></i><i class="capacity-headroom" style="width:{allowance/168*100:.4f}%"></i></span><strong>{total:g} GB</strong></div>'
+chart += '<figcaption>Calculated memory budget for a 70B model, including a 20% planning allowance. Decimal GB.</figcaption></figure>'
+table = '<figure class="figure"><div class="table-scroll"><table class="spec plain"><thead><tr><th scope="col">GPU</th><th scope="col">Candidate count</th><th scope="col">Est. per hour</th></tr></thead><tbody>'
+for name in ("NVIDIA H100", "NVIDIA H200", "AMD MI300X"):
+    row = next(r for r in study_rows if r["model_billions"] == 70 and r["precision"] == "FP16" and r["gpu"] == name)
+    table += '<tr><th scope="row">' + name + '</th><td>' + str(row["gpus"]) + '</td><td>$' + row["estimated_hourly_usd"] + '</td></tr>'
+table += '</tbody></table></div><figcaption>70B at FP16. Calculated candidates, using the ' + PRICE_DATE + ' price snapshot.</figcaption></figure>'
+
+def completed_article(title, desc, path, body, label, active):
+    metadata = {"@context": "https://schema.org", "@type": "TechArticle", "headline": title,
+                "description": desc, "datePublished": CONTENT_DATE, "dateModified": CONTENT_DATE,
+                "author": {"@type": "Person", "name": "Ankit Dongare", "url": SITE},
+                "mainEntityOfPage": SITE + path, "image": SITE + "/og-image.png"}
+    page = head(title + " · DatatalkwithAnkit", desc, path, og_type="article", extra=ld(metadata) + ld(crumbs(title, path)))
+    page += header(active)
+    page += '<main class="wrap"><article class="article"><a class="crumb" href="/blog">Back to all writing</a>'
+    page += '<p class="kicker-line">' + label + '</p><h1>' + title + '</h1>'
+    page += '<div class="byline-row"><span class="byline-avatar" aria-hidden="true"><img src="/images/ankit-about.jpg" alt="" width="120" height="150" loading="lazy"></span><div><strong>Ankit Dongare</strong>Nov 17, 2026</div></div>'
+    page += '<div class="prose">' + body + '</div></article>'
+    page += '<div class="article-end"><div class="panel article-subscribe"><h2>Get the next write-up</h2><p>Studies, practical tools, and notes on building AI systems.</p><a class="btn solid" href="/#newsletter">Get updates by email</a></div></div></main>'
+    return page + FOOTER
+
+study_body = STUDY_BODY.replace("{{study_chart}}", chart).replace("{{study_table}}", table).replace("{{price_date}}", PRICE_DATE)
+open(os.path.join(OUT, "posts", "llm-memory-capacity.html"), "w").write(completed_article(STUDY_TITLE, STUDY_DESC, "/posts/llm-memory-capacity", study_body, "Study · Code, inputs, and results", "Studies"))
+open(os.path.join(OUT, "projects", "video-pipeline.html"), "w").write(completed_article(PIPELINE_TITLE, PIPELINE_DESC, "/projects/video-pipeline", PIPELINE_BODY, "Project case study", "Projects"))
+
 # ======================= 404 =======================
 nf = head("Page not found · DatatalkwithAnkit", "This page doesn't exist.", "/404", robots="noindex, follow")
 nf += header()
@@ -816,8 +838,14 @@ open(os.path.join(OUT, "llms.txt"), "w").write(f"""# DatatalkwithAnkit
 ## Guides
 - [Best GPU for LLM inference (2026)]({SITE}/gpu-guide): how many H100, H200, B200, B300, MI300X, MI325X or MI355X GPUs a model needs, specs, and lowest on-demand prices. Updated quarterly.
 
+## Studies
+- [What fits in GPU memory?]({SITE}/posts/llm-memory-capacity): 105 calculated capacity scenarios, with Python, JSON inputs, and CSV results. These are estimates, not measured serving benchmarks.
+
 ## Posts
 - [H200 vs MI300X: what you're actually paying for]({SITE}/posts/h200-vs-mi300x): memory, NVLink vs PCIe scaling, and neocloud pricing.
+
+## Projects
+- [Video publishing workflow]({SITE}/projects/video-pipeline): project case study.
 
 ## Tools
 - [Will-it-fit calculator]({SITE}/#fit-section): GPUs needed and hourly cost for a model size and precision.
@@ -827,10 +855,10 @@ open(os.path.join(OUT, "llms.txt"), "w").write(f"""# DatatalkwithAnkit
 - [Uses]({SITE}/uses): tools used for benchmarking.
 """)
 open(os.path.join(OUT, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\nSitemap: {SITE}/sitemap.xml\n")
-urls = [("/", "1.0"), ("/gpu-guide", "0.9"), ("/posts/h200-vs-mi300x", "0.9"), ("/blog", "0.8"), ("/papers", "0.7"), ("/uses", "0.5")]
+urls = [("/posts/llm-memory-capacity", "0.9"), ("/projects/video-pipeline", "0.7"), ("/", "1.0"), ("/gpu-guide", "0.9"), ("/posts/h200-vs-mi300x", "0.9"), ("/blog", "0.8"), ("/papers", "0.7"), ("/uses", "0.5")]
 open(os.path.join(OUT, "sitemap.xml"), "w").write(
     '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-    "".join(f"  <url><loc>{SITE}{u}</loc><lastmod>{PRICE_DATE_ISO if u in ('/', '/gpu-guide') else '2026-10-12'}</lastmod><priority>{p}</priority></url>\n" for u, p in urls) +
+    "".join(f"  <url><loc>{SITE}{u}</loc><lastmod>{PRICE_DATE_ISO if u == '/gpu-guide' else CONTENT_DATE if u in ('/', '/blog', '/papers', '/posts/llm-memory-capacity', '/projects/video-pipeline') else '2026-10-12'}</lastmod><priority>{p}</priority></url>\n" for u, p in urls) +
     "</urlset>\n")
 open(os.path.join(OUT, "rss.xml"), "w").write(f"""<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
@@ -839,8 +867,22 @@ open(os.path.join(OUT, "rss.xml"), "w").write(f"""<?xml version="1.0" encoding="
     <link>{SITE}</link>
     <description>LLM inference benchmarks, GPUs, serving configs, and cost, by Ankit Dongare.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 12 Oct 2026 09:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 17 Nov 2026 16:00:00 GMT</lastBuildDate>
     <atom:link href="{SITE}/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title>{STUDY_TITLE}</title>
+      <link>{SITE}/posts/llm-memory-capacity</link>
+      <guid isPermaLink="true">{SITE}/posts/llm-memory-capacity</guid>
+      <description>{STUDY_DESC}</description>
+      <pubDate>Tue, 17 Nov 2026 16:00:00 GMT</pubDate>
+    </item>
+    <item>
+      <title>{PIPELINE_TITLE}</title>
+      <link>{SITE}/projects/video-pipeline</link>
+      <guid isPermaLink="true">{SITE}/projects/video-pipeline</guid>
+      <description>{PIPELINE_DESC}</description>
+      <pubDate>Tue, 17 Nov 2026 16:00:00 GMT</pubDate>
+    </item>
     <item>
       <title>Which GPU should you rent for LLM inference?</title>
       <link>{SITE}/gpu-guide</link>

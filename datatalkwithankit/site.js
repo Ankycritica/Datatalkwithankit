@@ -10,6 +10,23 @@
 
   /* ---------- theme ---------- */
   var root = document.documentElement;
+  root.classList.add('has-js');
+  var menu = document.querySelector('.menu-toggle');
+  var nav = document.getElementById('main-nav');
+  if (menu && nav) {
+    menu.addEventListener('click', function () {
+      var open = menu.getAttribute('aria-expanded') !== 'true';
+      menu.setAttribute('aria-expanded', String(open));
+      menu.textContent = open ? 'Close' : 'Menu';
+      nav.classList.toggle('is-open', open);
+    });
+    nav.addEventListener('click', function (event) {
+      if (!event.target.closest('a')) return;
+      menu.setAttribute('aria-expanded', 'false');
+      menu.textContent = 'Menu';
+      nav.classList.remove('is-open');
+    });
+  }
   function setTheme(t) {
     if (t === 'light') root.setAttribute('data-theme', 'light');
     else root.removeAttribute('data-theme');
@@ -30,17 +47,21 @@
     var LABEL = { fp16: 'FP16', fp8: 'FP8', int4: 'INT4' };
     var state = { size: 70, prec: 'fp16' };
     var MAX_BLOCKS = 8;
+    var expanded = false;
+    var toggle = document.getElementById('fit-toggle');
+    var results = document.getElementById('fit-results');
 
     function money(n) { return '$' + n.toFixed(2); }
-    function pow2(n) { var p = 1; while (p < n) p *= 2; return p; } /* tensor parallelism splits evenly: 1, 2, 4, 8 */
+    function pow2(n) { var p = 1; while (p < n) p *= 2; return p; } /* Candidate counts, subject to model/runtime support. */
 
     function render() {
       var need = state.size * BYTES[state.prec] * 1.2;
       document.getElementById('fit-need').innerHTML =
-        'A ' + state.size + 'B model at ' + LABEL[state.prec] + ' needs about ' + Math.round(need) + ' GB' +
-        '<span>Weights, plus 20% headroom for the KV cache.</span>';
+        (state.size === 8 ? 'An ' : 'A ') + state.size + 'B model at ' + LABEL[state.prec] + ': about ' + Math.round(need) + ' GB' +
+        '<span>Estimated weights + 20% runtime allowance.</span>';
 
       var best = null;
+      var ranked = [];
       rowsEls.forEach(function (row) {
         var name = row.getAttribute('data-name');
         var mem = parseFloat(row.getAttribute('data-mem'));
@@ -48,6 +69,7 @@
         var n = pow2(Math.max(1, Math.ceil(need / mem)));
         var perGpu = Math.min(100, (need / n) / mem * 100);
         var cost = n * rate;
+        ranked.push({ row: row, cost: cost, n: n });
         if (!best || cost < best.cost) best = { name: name, cost: cost, n: n, row: row };
 
         var blocks = '';
@@ -63,9 +85,19 @@
         row.setAttribute('aria-label', name + ': ' + n + (n === 1 ? ' GPU' : ' GPUs') + ', about ' + money(cost) + ' per hour');
         row.classList.remove('best');
       });
+      ranked.sort(function (a, b) { return a.cost - b.cost || a.n - b.n; });
+      ranked.forEach(function (item, index) {
+        if (results) results.appendChild(item.row);
+        item.row.hidden = !expanded && index >= 3;
+      });
+      if (toggle) {
+        toggle.hidden = false;
+        toggle.textContent = expanded ? 'Show fewer GPUs' : 'Show all ' + rowsEls.length + ' GPUs';
+        toggle.setAttribute('aria-expanded', String(expanded));
+      }
       best.row.classList.add('best');
       document.getElementById('fit-best').textContent =
-        'Cheapest here: ' + best.n + ' ' + best.name + (best.n === 1 ? '' : 's') + ' at about ' + money(best.cost) + ' per hour.';
+        'Lowest estimate: ' + best.n + ' × ' + best.name + ' · ' + money(best.cost) + '/hour.';
     }
 
     function wire(groupId, key, parse) {
@@ -81,6 +113,7 @@
     }
     wire('fit-size', 'size', function (v) { return parseFloat(v); });
     wire('fit-prec', 'prec', function (v) { return v; });
+    if (toggle) toggle.addEventListener('click', function () { expanded = !expanded; render(); });
     render();
   }
 

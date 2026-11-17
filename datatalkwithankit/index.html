@@ -38,7 +38,8 @@
 <header class="site-head">
   <div class="wrap head-inner">
     <a class="wordmark" href="/" aria-label="DatatalkwithAnkit, home">Datatalkwith<b>Ankit</b></a>
-    <nav class="nav" aria-label="Main"><a href="/blog">Writing</a><a href="/gpu-guide">GPU guide</a><a href="/papers">Papers</a><a href="/#projects">Projects</a><a href="/uses">Uses</a><a href="/#contact">Contact</a></nav>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">Menu</button>
+    <nav class="nav" id="main-nav" aria-label="Main"><a href="/blog">Writing</a><a href="/gpu-guide">GPU guide</a><a href="/papers">Studies</a><a href="/#projects">Projects</a><a href="/uses">Uses</a><a href="/#contact">Contact</a></nav>
       <button class="theme" type="button" aria-label="Switch between light and dark theme">
         <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
         <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2 12h2.2M19.8 12H22M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/></svg>
@@ -51,14 +52,15 @@
     <div>
       <p class="hero-who">Ankit Dongare, AI engineer</p>
       <h1>I measure what language models cost to run.</h1>
-      <p class="hero-lede">I benchmark LLM inference: GPUs, serving configs, throughput, and price. When I run a benchmark, I publish the configs with it so you can rerun it and check my numbers.</p>
+      <p class="hero-lede">I work on LLM inference: GPUs, serving configs, throughput, and price. Here I share comparisons, practical tools, and reproducible studies with the assumptions and inputs behind the numbers.</p>
       <div class="hero-actions">
-        <a class="btn solid" href="/posts/h200-vs-mi300x">Read the latest post</a>
-        <a class="btn" href="#contact">Get new posts by email</a>
+        <a class="btn solid" href="/posts/llm-memory-capacity">Read the memory study</a>
+        <a class="btn" href="#newsletter">Get new posts by email</a>
       </div>
-      <div class="latest">
-        <span>Latest</span>
-        <a href="/posts/h200-vs-mi300x">H200 vs MI300X: what you're actually paying for</a>
+      <div class="hero-links" aria-label="Explore the site">
+        <a href="#fit-section">Capacity calculator <span aria-hidden="true">&rarr;</span></a>
+        <a href="/gpu-guide">GPU guide <span aria-hidden="true">&rarr;</span></a>
+        <a href="#projects">Selected projects <span aria-hidden="true">&rarr;</span></a>
       </div>
     </div>
     <aside class="board" aria-labelledby="board-title">
@@ -78,40 +80,11 @@
   </div>
 </section>
 
-<section class="section start" aria-labelledby="start-title">
-  <div class="wrap">
-    <div class="sec-head">
-      <h2 id="start-title">Start here</h2>
-      <p>New to the site? These three are the best way in.</p>
-    </div>
-    <div class="start-grid">
-      <a class="start-card" href="/gpu-guide">
-        <span class="kicker">Guide, updated quarterly</span>
-        <h3>Which GPU should you rent for LLM inference?</h3>
-        <p>Seven current GPUs compared: memory, bandwidth, GPUs per model, and price. Kept current.</p>
-        <span class="go">Read the guide</span>
-      </a>
-      <a class="start-card" href="/posts/h200-vs-mi300x">
-        <span class="kicker">Deep dive</span>
-        <h3>H200 vs MI300X: what you're actually paying for</h3>
-        <p>Memory, NVLink vs PCIe, and real neocloud prices, compared.</p>
-        <span class="go">Read the post</span>
-      </a>
-      <a class="start-card" href="#fit-section">
-        <span class="kicker">Tool</span>
-        <h3>Will your model fit?</h3>
-        <p>Pick a model size and precision. See GPUs needed and the hourly cost.</p>
-        <span class="go">Try the calculator</span>
-      </a>
-    </div>
-  </div>
-</section>
-
 <section class="section" id="fit-section" aria-labelledby="fit-title">
   <div class="wrap">
     <div class="sec-head">
       <h2 id="fit-title">Will your model fit?</h2>
-      <p>Pick a model size and precision to see how many GPUs it takes on seven current data-center GPUs, and what that costs per hour.</p>
+      <p>Choose a model size and weight precision. Compare the three lowest estimated hourly costs, or expand to all seven GPUs.</p>
     </div>
     <div class="fit" id="fit">
       <div class="fit-controls">
@@ -126,7 +99,7 @@
           </div>
         </div>
         <div>
-          <span class="ctl-label" id="lbl-prec">Precision</span>
+          <span class="ctl-label" id="lbl-prec">Weight precision</span>
           <div class="seg" id="fit-prec" role="group" aria-labelledby="lbl-prec">
             <button type="button" data-v="fp16" aria-pressed="true">FP16</button>
             <button type="button" data-v="fp8" aria-pressed="false">FP8</button>
@@ -134,7 +107,11 @@
           </div>
         </div>
       </div>
-      <p class="fit-need" id="fit-need" aria-live="polite"></p>
+      <div class="fit-summary">
+        <p class="fit-need" id="fit-need" aria-live="polite"></p>
+        <p class="fit-best" id="fit-best" aria-live="polite"></p>
+      </div>
+      <div id="fit-results">
       <div class="fit-row nv" data-name="NVIDIA H100" data-mem="80" data-rate="1.8">
         <div class="fit-name">NVIDIA H100<small>80 GB per GPU</small></div>
         <div class="fit-blocks"></div>
@@ -170,9 +147,11 @@
         <div class="fit-blocks"></div>
         <div class="fit-out"></div>
       </div>
+      </div>
+      <button class="btn fit-toggle" id="fit-toggle" type="button" aria-expanded="false" aria-controls="fit-results" hidden>Show all 7 GPUs</button>
       <div class="fit-foot">
-        <p id="fit-best" aria-live="polite"></p>
-        <p>Rough estimate. GPU counts round up to 1, 2, 4 or 8, since tensor parallelism splits a model evenly. Prices are the lowest listed on-demand rate per GPU-hour on getdeploying.com, Nov 9, 2026; some offers may not be in stock. <a class="link" href="/gpu-guide">Full GPU guide</a></p>
+        <p>Capacity estimates, using a 20% runtime allowance and power-of-two GPU counts. Actual fit depends on the model and workload. <a class="link" href="/posts/llm-memory-capacity">Method, code, and results</a>.</p>
+        <p>Prices: <a class="link" href="https://getdeploying.com">getdeploying.com</a>, Nov 9, 2026. Listed on-demand rates; availability and node minimums vary.</p>
       </div>
     </div>
   </div>
@@ -181,40 +160,37 @@
 <section class="section" id="writing" aria-labelledby="writing-title">
   <div class="wrap">
     <div class="sec-head">
-      <h2 id="writing-title">Writing</h2>
-      <p>GPU comparisons, inference benchmarks, and notes on the AI market. Posts go up when the work is done.</p>
+      <h2 id="writing-title">Writing &amp; studies</h2>
+      <p>Finished work you can read, inspect, and use.</p>
     </div>
-    <a class="feature" href="/posts/h200-vs-mi300x">
+    <a class="feature" href="/posts/llm-memory-capacity">
       <div>
-        <p class="kicker">Latest post</p>
-        <h3>H200 vs MI300X: what you're actually paying for</h3>
-        <p>AMD sells memory, NVIDIA sells interconnect and a software stack that already works. Which is the better buy depends on whether your problem is fitting the model or making many GPUs act like one.</p>
-        <p class="byline">Aug 21, 2026, 9 minute read</p>
+        <p class="kicker">New study · Code + inputs + results</p>
+        <h3>What fits in GPU memory?</h3>
+        <p>Five model sizes, three weight precisions, seven GPUs. A reproducible worksheet for the capacity question behind every rental decision.</p>
+        <p class="byline">Nov 17, 2026 · Calculated estimates · 6 min read</p>
       </div>
-      <div class="mini-chart" aria-label="Memory per GPU: H200 141 GB, MI300X 192 GB">
-        <div class="mc-row"><b>H200</b><div class="mc-track"><div class="mc-fill v" style="width:73%"></div></div><span>141 GB</span></div>
-        <div class="mc-row"><b>MI300X</b><div class="mc-track"><div class="mc-fill c" style="width:100%"></div></div><span>192 GB</span></div>
-        <p class="mc-cap">Memory per GPU</p>
+      <div class="study-preview" aria-label="70B model memory estimates: FP16 168 GB, FP8 84 GB, INT4 42 GB">
+        <span class="chart-eyebrow">70B model · Memory budget</span>
+        <div><b>FP16</b><span class="preview-track"><i style="width:100%"></i></span><strong>168 GB</strong></div>
+        <div><b>FP8</b><span class="preview-track"><i style="width:50%"></i></span><strong>84 GB</strong></div>
+        <div><b>INT4</b><span class="preview-track"><i style="width:25%"></i></span><strong>42 GB</strong></div>
+        <small>Weights + 20% planning allowance</small>
       </div>
     </a>
     <div class="posts">
-<div class="post-row" data-tags="quantization benchmarking">
-  <span class="when">Coming soon</span>
-  <div><h3>Quantization in practice: quality vs. cost on consumer GPUs</h3><p>What happens to output quality and tokens per second going from FP16 to INT8 and INT4, measured on real prompts.</p></div>
-  <span class="status">In progress</span>
-</div>
-<div class="post-row" data-tags="vllm benchmarking">
-  <span class="when">Coming soon</span>
-  <div><h3>How batch size changes vLLM throughput</h3><p>A single-GPU sweep of max_num_seqs, measuring tokens per second against p50 and p95 latency.</p></div>
-  <span class="status">In progress</span>
-</div>
-<div class="post-row" data-tags="vllm memory">
-  <span class="when">Coming soon</span>
-  <div><h3>KV cache is the real memory budget</h3><p>Why context length, not parameter count, usually decides how many users one GPU can hold.</p></div>
-  <span class="status">In progress</span>
-</div>
+<a class="post-row" href="/gpu-guide" data-tags="gpus cost memory">
+  <span class="when">Updated Nov 9, 2026</span>
+  <div><h3>Which GPU should you rent for LLM inference?</h3><p>H100, H200, B200, B300, MI300X, MI325X and MI355X compared: memory, bandwidth, GPUs per model, and price. Updated every quarter.</p></div>
+  <span class="status live">Guide</span>
+</a>
+<a class="post-row" href="/posts/h200-vs-mi300x" data-tags="gpus cost memory benchmarking">
+  <span class="when">Aug 21, 2026</span>
+  <div><h3>H200 vs MI300X: what you're actually paying for</h3><p>Memory, interconnect, and price compared. What the extra 51 GB buys, why PCIe vs NVLink decides multi-GPU scaling, and what a GPU-hour really costs.</p></div>
+  <span class="status live">9 min read</span>
+</a>
     </div>
-    <p class="more"><a class="link" href="/blog">See everything I'm writing</a></p>
+    <p class="more"><a class="link" href="/blog">Browse all writing</a></p>
   </div>
 </section>
 
@@ -224,37 +200,38 @@
       <h2 id="projects-title">Projects</h2>
       <p>Things I've built and run. More on <a class="link" href="https://github.com/Ankycritica">GitHub</a>.</p>
     </div>
-    <div class="aurapal">
-      <div>
-        <p class="kicker">My product</p>
-        <h3>Aurapal</h3>
-        <p>A career platform I design, build, and run end to end. It's where my engineering, automation, and product work come together.</p>
-        <a class="btn solid" href="https://aurapal.org">Visit aurapal.org</a>
-      </div>
-      <ul>
-        <li><strong>Built solo</strong>From design and code to deployment and support.</li>
-        <li><strong>Automation-first</strong>Repetitive work is scripted, so the time goes into the product.</li>
-        <li><strong>Live</strong>Running in production at aurapal.org.</li>
-      </ul>
+    <div class="project-grid">
+      <article class="project-card">
+        <a class="project-shot" href="https://www.aurapal.org/" aria-label="Visit AuraPal">
+          <span class="browser-bar" aria-hidden="true"><i></i><i></i><i></i><span>aurapal.org</span></span>
+          <img src="/images/aurapal-project.jpg" alt="AuraPal's live career-tools homepage with resume tools and a salary comparison" width="1350" height="926" loading="lazy">
+        </a>
+        <div class="project-body">
+          <p class="kicker">My product · Live</p><h3>AuraPal</h3>
+          <p>An AI career platform I design, build, and run. From resumes to interview preparation, the focus is turning a complex task into a useful result.</p>
+          <a class="link" href="https://www.aurapal.org/">Explore AuraPal <span aria-hidden="true">&rarr;</span></a>
+        </div>
+      </article>
+      <article class="project-card">
+        <a class="project-shot" href="https://ewg-jade.vercel.app/" aria-label="Visit EWG Solutions">
+          <span class="browser-bar" aria-hidden="true"><i></i><i></i><i></i><span>EWG Solutions</span></span>
+          <img src="/images/ewg-project.jpg" alt="EWG Solutions' live white-glove logistics website in black and gold" width="1350" height="926" loading="lazy">
+        </a>
+        <div class="project-body">
+          <p class="kicker">Client website · Live</p><h3>Elite White Glove</h3>
+          <p>A service website for a logistics business, with clear service pages and a direct path from learning about the company to requesting a quote.</p>
+          <div class="project-links"><a class="link" href="https://ewg-jade.vercel.app/">Visit website <span aria-hidden="true">&rarr;</span></a><a class="link" href="https://github.com/Ankycritica/EWG">View source</a></div>
+        </div>
+      </article>
     </div>
     <div class="proj">
-      <h3>Automated YouTube pipeline</h3>
-      <div><p>Generates, renders, captions, and publishes videos with almost no manual steps.</p><span class="tech">Python, FFmpeg, Whisper, YouTube Data API</span></div>
-      <a class="link" href="https://github.com/Ankycritica">View on GitHub</a>
-    </div>
-    <div class="proj">
-      <h3>LLM inference benchmarks</h3>
-      <div><p>An ongoing series on how batch size, quantization, and context length change throughput, latency, and cost.</p><span class="tech">vLLM, PyTorch, Python</span></div>
-      <a class="link" href="/blog">Read the series</a>
-    </div>
-    <div class="proj">
-      <h3>EWG, Elite White Glove</h3>
-      <div><p>A conversion-focused website for a white-glove service business, from design to deployment.</p><span class="tech">HTML, CSS, Vercel</span></div>
-      <a class="link" href="https://github.com/Ankycritica/EWG">View source</a>
+      <h3>Video publishing workflow</h3>
+      <div><p>A Python workflow connecting source checks, narration, rendering, captions, and publishing.</p><span class="tech">Python, FFmpeg, Whisper, YouTube Data API</span></div>
+      <a class="link" href="/projects/video-pipeline">Read case study</a>
     </div>
     <div class="proj">
       <h3>HNH Handyman</h3>
-      <div><p>A booking-focused web app for a handyman service, with a typed, maintainable codebase.</p><span class="tech">TypeScript</span></div>
+      <div><p>A service and booking website for a local handyman business.</p><span class="tech">TypeScript · <a class="link" href="https://hnh-handyman-liart.vercel.app/">Visit website</a></span></div>
       <a class="link" href="https://github.com/Ankycritica/hnhHandyman">View source</a>
     </div>
   </div>
@@ -265,12 +242,16 @@
     <div class="sec-head"><h2 id="about-title">About</h2></div>
     <div class="about-grid">
       <div class="about-text">
-        <p>I started as a data analyst turning messy tables into answers, and kept following the harder questions until they led to building AI systems full time.</p>
+        <p>I’m Ankit, an AI engineer based in the Washington, DC area. I started with data analytics and kept following the harder questions until they led to building AI systems full time.</p>
         <p>Today I work on the practical side of large language models: how they're served, how fast they run, what they cost, and how configuration choices change all three. At work I benchmark and evaluate an enterprise LLM inference platform, measuring throughput, latency, and cost across models, serving configs, and hardware.</p>
         <p>That data background still shapes how I work. I trust measurements over opinions, and if I do something twice, I write a script for it.</p>
         <p class="stack-line">Day to day: Python, PyTorch, vLLM, Hugging Face, Docker, and AWS. The full list is on the <a class="link" href="/uses">uses page</a>.</p>
       </div>
-      <div>
+      <div class="about-person">
+        <figure class="about-portrait">
+          <img src="/images/ankit-about.jpg" alt="Ankit Dongare in Washington, DC" width="1000" height="1250" loading="lazy">
+          <figcaption>Ankit Dongare <span>AI engineer · Builder</span></figcaption>
+        </figure>
         <ul class="creds">
           <li><strong>Inference benchmarking</strong>Evaluating an enterprise LLM inference platform at work</li>
           <li><strong>Product builder</strong>Designs, ships, and runs <a class="link" href="https://aurapal.org">Aurapal</a> in production</li>
@@ -290,13 +271,13 @@
     <div class="connect">
       <div class="panel" id="newsletter">
         <h2>The newsletter</h2>
-        <p>New benchmarks and write-ups, sent when they're published. No schedule and no filler. Unsubscribe any time.</p>
+        <p>New studies and write-ups, sent when they're published. Request updates by email, or follow the RSS feed.</p>
         <form id="subscribe" class="inline-form" novalidate>
           <label class="sr-only" for="sub-email">Email address</label>
           <input id="sub-email" type="email" placeholder="you@example.com" autocomplete="email">
-          <button class="btn solid" type="submit">Subscribe</button>
+          <button class="btn solid" type="submit">Request updates</button>
         </form>
-        <p class="note">Signups come straight to me while the list is small.</p>
+        <p class="note">Opens your email app with a signup request for you to send.</p>
         <div class="socials">
           <a href="https://youtube.com/@datatalkwithankit">YouTube</a>
           <a href="https://instagram.com/datatalkwithankit">Instagram</a>
@@ -310,7 +291,7 @@
         <label class="field"><span>Email</span><input name="email" type="email" autocomplete="email"></label>
         <label class="field"><span>Message</span><textarea name="message" rows="4"></textarea></label>
         <button class="btn solid" type="submit">Send message</button>
-        <p class="note">I usually reply within two days. Or email <a class="link" href="mailto:dongare.ankit29@gmail.com">dongare.ankit29@gmail.com</a>.</p>
+        <p class="note">Opens your email app. I usually reply within two days. Or email <a class="link" href="mailto:dongare.ankit29@gmail.com">dongare.ankit29@gmail.com</a>.</p>
       </form>
     </div>
   </div>
@@ -320,7 +301,7 @@
   <div class="wrap foot-inner">
     <span>&copy; 2026 Ankit Dongare, Washington, DC</span>
     <nav aria-label="Footer">
-      <a href="/blog">Writing</a><a href="/gpu-guide">GPU guide</a><a href="/papers">Papers</a><a href="/uses">Uses</a>
+      <a href="/blog">Writing</a><a href="/gpu-guide">GPU guide</a><a href="/papers">Studies</a><a href="/uses">Uses</a>
       <a href="/rss.xml">RSS feed</a><a href="https://github.com/Ankycritica">GitHub</a>
     </nav>
   </div>
