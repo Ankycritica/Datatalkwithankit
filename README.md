@@ -23,6 +23,8 @@ Personal site of **Ankit Dongare**, an AI engineer who measures what language mo
 - **Reproducible capacity study**: 105 calculated scenarios at [/posts/llm-memory-capacity](https://www.datatalkwithankit.com/posts/llm-memory-capacity), with Python, JSON inputs, and CSV results. These are planning estimates, not hardware benchmark measurements.
 - **Project case study**: [/projects/video-pipeline](https://www.datatalkwithankit.com/projects/video-pipeline).
 
+- **AI models by GPU**: choose any of the seven GPUs and a weight precision to compare named Qwen, Llama, and DeepSeek examples. Each model links to its publisher card; memory budgets are estimates, with separate CUDA/ROCm guidance.
+
 ## Structure
 
 ```

@@ -59,6 +59,7 @@
       </div>
       <div class="hero-links" aria-label="Explore the site">
         <a href="#fit-section">Capacity calculator <span aria-hidden="true">&rarr;</span></a>
+        <a href="#ai-models">AI models <span aria-hidden="true">&rarr;</span></a>
         <a href="/gpu-guide">GPU guide <span aria-hidden="true">&rarr;</span></a>
         <a href="#projects">Selected projects <span aria-hidden="true">&rarr;</span></a>
       </div>
@@ -157,6 +158,111 @@
   </div>
 </section>
 
+
+<section class="section model-section" id="ai-models" aria-labelledby="models-title">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 id="models-title">AI models by GPU</h2>
+      <p>Choose a GPU to shortlist open-weight text models for chat, coding, and reasoning.</p>
+    </div>
+    <div class="model-explorer" id="model-explorer" data-default-expanded="false">
+      <div class="model-controls">
+        <label for="model-gpu">Your GPU<select id="model-gpu" disabled><option value="h100" data-memory="80" data-vendor="nv">NVIDIA H100 · 80 GB</option><option value="h200" data-memory="141" data-vendor="nv">NVIDIA H200 · 141 GB</option><option value="b200" data-memory="180" data-vendor="nv">NVIDIA B200 · 180 GB</option><option value="b300" data-memory="288" data-vendor="nv">NVIDIA B300 · 288 GB</option><option value="mi300x" data-memory="192" data-vendor="amd">AMD MI300X · 192 GB</option><option value="mi325x" data-memory="256" data-vendor="amd">AMD MI325X · 256 GB</option><option value="mi355x" data-memory="288" data-vendor="amd">AMD MI355X · 288 GB</option></select></label>
+        <label for="model-precision">Weight precision<select id="model-precision" disabled>
+          <option value="2">16-bit · BF16 / FP16</option>
+          <option value="1">FP8 · memory estimate</option>
+          <option value="0.5">INT4 · memory estimate</option>
+        </select></label>
+      </div>
+      <p class="model-summary" id="model-summary" role="status" aria-live="polite">
+        All 7 examples · NVIDIA H100 · 16-bit estimates</p>
+      <p class="model-runtime" id="model-runtime">NVIDIA: use a CUDA-compatible serving build and check support for this GPU and checkpoint.</p>
+      <noscript><p class="note">Enable JavaScript to change the GPU and precision. This table shows NVIDIA H100 with 16-bit estimates.</p></noscript>
+      <table class="model-table">
+        <caption class="sr-only">Example language models, estimated memory budget, and candidate GPU counts</caption>
+        <thead><tr><th scope="col">Model · publisher card</th><th scope="col">Typical use</th><th scope="col">Est. memory</th><th scope="col">GPU count</th></tr></thead>
+        <tbody id="model-results">
+          <tr data-parameters="8.2">
+            <th scope="row"><a href="https://huggingface.co/Qwen/Qwen3-8B">Qwen3-8B</a>
+              <small>≈8.2B parameters · Dense</small></th>
+            <td data-label="Typical use">Chat &amp; reasoning</td>
+            <td data-label="Est. memory" class="model-memory">19.7 GB</td>
+            <td data-label="GPU count"><span class="model-count single">1 GPU</span>
+              <small class="model-fit-label">Memory candidate</small></td>
+          </tr>
+          <tr data-parameters="32.5">
+            <th scope="row"><a href="https://huggingface.co/Qwen/Qwen2.5-Coder-32B-Instruct">Qwen2.5-Coder-32B-Instruct</a>
+              <small>≈32.5B parameters · Dense</small></th>
+            <td data-label="Typical use">Coding assistants</td>
+            <td data-label="Est. memory" class="model-memory">78.0 GB</td>
+            <td data-label="GPU count"><span class="model-count tight">1 GPU</span>
+              <small class="model-fit-label">Tight budget</small></td>
+          </tr>
+          <tr data-parameters="32.8">
+            <th scope="row"><a href="https://huggingface.co/Qwen/Qwen3-32B">Qwen3-32B</a>
+              <small>≈32.8B parameters · Dense</small></th>
+            <td data-label="Typical use">Chat &amp; reasoning</td>
+            <td data-label="Est. memory" class="model-memory">78.7 GB</td>
+            <td data-label="GPU count"><span class="model-count tight">1 GPU</span>
+              <small class="model-fit-label">Tight budget</small></td>
+          </tr>
+          <tr data-parameters="70">
+            <th scope="row"><a href="https://huggingface.co/meta-llama/Llama-3.3-70B-Instruct">Llama-3.3-70B-Instruct</a>
+              <small>≈70B parameters · Dense</small></th>
+            <td data-label="Typical use">Multilingual chat</td>
+            <td data-label="Est. memory" class="model-memory">168.0 GB</td>
+            <td data-label="GPU count"><span class="model-count multi">4 GPUs</span>
+              <small class="model-fit-label">Multiple GPUs</small></td>
+          </tr>
+          <tr data-parameters="235">
+            <th scope="row"><a href="https://huggingface.co/Qwen/Qwen3-235B-A22B">Qwen3-235B-A22B</a>
+              <small>≈235B parameters · MoE · total parameters</small></th>
+            <td data-label="Typical use">Chat &amp; reasoning</td>
+            <td data-label="Est. memory" class="model-memory">564.0 GB</td>
+            <td data-label="GPU count"><span class="model-count multi">8 GPUs</span>
+              <small class="model-fit-label">Multiple GPUs</small></td>
+          </tr>
+          <tr data-parameters="405">
+            <th scope="row"><a href="https://huggingface.co/meta-llama/Llama-3.1-405B-Instruct">Llama-3.1-405B-Instruct</a>
+              <small>≈405B parameters · Dense</small></th>
+            <td data-label="Typical use">Large chat model</td>
+            <td data-label="Est. memory" class="model-memory">972.0 GB</td>
+            <td data-label="GPU count"><span class="model-count multi">16 GPUs</span>
+              <small class="model-fit-label">Multiple GPUs</small></td>
+          </tr>
+          <tr data-parameters="685">
+            <th scope="row"><a href="https://huggingface.co/deepseek-ai/DeepSeek-R1-0528">DeepSeek-R1-0528</a>
+              <small>≈685B parameters · MoE · stored parameters</small><small class="model-checkpoint">Publisher checkpoint mixes FP8 and higher-precision tensors; format choices below are memory comparisons.</small></th>
+            <td data-label="Typical use">Advanced reasoning</td>
+            <td data-label="Est. memory" class="model-memory">1,644.0 GB</td>
+            <td data-label="GPU count"><span class="model-count multi">32 GPUs</span>
+              <small class="model-fit-label">Multiple GPUs</small></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="note" id="model-empty" hidden>No single-GPU candidates in this selection. Expand the list to see multi-GPU estimates.</p>
+      <button class="btn model-toggle" id="model-toggle" type="button" aria-expanded="false" aria-controls="model-results" hidden>Show all 7 models</button>
+      <div class="model-notes">
+        <p>Memory estimates = approximate total parameters × bytes per weight × 1.2, in decimal GB.
+        The 20% allowance is a starting point; context length, KV cache, batching, and runtime allocations change actual fit.
+        Counts round up to power-of-two candidates. Multi-GPU configurations also need supported parallelism and interconnects.</p>
+        <details class="model-method">
+          <summary>Precision, checkpoints, and sources</summary>
+          <p>FP8 and INT4 compare memory footprints; they require an appropriate quantized checkpoint and kernels for your hardware.
+          CUDA quantization implementations do not automatically work on AMD. Check the
+          <a class="link" href="https://docs.vllm.ai/en/stable/features/quantization/">vLLM hardware compatibility table</a>
+          for the exact format and backend.</p>
+          <p>MoE memory uses all stored parameters, including inactive experts. Model names link to publisher cards with architecture,
+          download access, and license details. DeepSeek's mixed-precision checkpoint can differ from these simplified format estimates.
+          These are inference planning examples; they have not been benchmarked on every GPU.</p>
+          <p>Catalog reviewed Nov 20, 2026. <a class="link" href="/posts/llm-memory-capacity">How the memory estimates work</a>.</p>
+        </details>
+        <p class="model-end-link"><a class="link" href="/gpu-guide#ai-models">Full GPU &amp; model guide</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="section" id="writing" aria-labelledby="writing-title">
   <div class="wrap">
     <div class="sec-head">
@@ -180,7 +286,7 @@
     </a>
     <div class="posts">
 <a class="post-row" href="/gpu-guide" data-tags="gpus cost memory">
-  <span class="when">Updated Nov 9, 2026</span>
+  <span class="when">Updated Nov 20, 2026</span>
   <div><h3>Which GPU should you rent for LLM inference?</h3><p>H100, H200, B200, B300, MI300X, MI325X and MI355X compared: memory, bandwidth, GPUs per model, and price. Updated every quarter.</p></div>
   <span class="status live">Guide</span>
 </a>

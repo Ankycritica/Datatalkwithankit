@@ -477,3 +477,66 @@ html{scroll-padding-top:90px}
   .about-portrait{display:grid;grid-template-columns:90px 1fr;align-items:center;gap:16px}
   .about-portrait figcaption{margin:0}
 }
+
+/* ---------- publisher-sourced model explorer ---------- */
+.model-explorer{border:1px solid var(--line);border-radius:20px;background:var(--panel);padding:clamp(18px,3vw,32px);min-width:0}
+.model-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px 24px}
+.model-controls label{display:block;min-width:0;color:var(--soft);font-size:.9rem;font-weight:500}
+.model-controls select{display:block;width:100%;min-width:0;margin-top:8px;padding:12px 36px 12px 12px;min-height:46px;border:1px solid var(--line-2);border-radius:10px;background:var(--bg);color:var(--text);font:400 .97rem/1.4 var(--body);cursor:pointer}
+.model-controls select:disabled{cursor:default;opacity:.7}
+.model-summary{margin:24px 0 7px!important;color:var(--text)!important;font-weight:500;font-size:1rem}
+.model-runtime{margin:0 0 24px!important;color:var(--muted)!important;font-size:.9rem;line-height:1.6}
+.model-table{border-collapse:collapse;width:100%;font-size:.93rem;table-layout:fixed}
+.model-table th,.model-table td{text-align:left;vertical-align:top;border-top:1px solid var(--line);padding:16px 12px}
+.model-table thead th{font-size:.82rem;font-weight:500;color:var(--muted);padding-top:12px;padding-bottom:12px}
+.model-table thead th:first-child{width:40%}
+.model-table thead th:nth-child(2){width:22%}
+.model-table thead th:nth-child(3){width:19%}
+.model-table thead th:nth-child(4){width:19%}
+.model-table th:first-child{padding-left:0}
+.model-table td:last-child,.model-table thead th:last-child{padding-right:0}
+.model-table tbody th{font-weight:500;line-height:1.45;overflow-wrap:anywhere}
+.model-table th a{font-weight:600;color:var(--text);text-decoration:underline;text-decoration-color:var(--line-2);text-underline-offset:4px}
+.model-table th a:hover{text-decoration-color:var(--violet)}
+.model-table th small{display:block;color:var(--muted);font-weight:400;font-size:.8rem;margin-top:5px}
+.model-table th .model-checkpoint{font-size:.78rem;line-height:1.5;max-width:45ch;margin-top:8px}
+.model-table td{color:var(--soft)}
+.model-memory{font-family:var(--mono);font-size:.85rem;white-space:nowrap}
+.model-count{display:inline-block;border:1px solid var(--line-2);border-radius:999px;font-size:.85rem;padding:2px 9px;color:var(--text);white-space:nowrap}
+.model-count.single{color:var(--cyan);border-color:color-mix(in srgb,var(--cyan) 45%,var(--line))}
+.model-count.tight{color:var(--text);border-color:var(--violet);background:color-mix(in srgb,var(--violet) 12%,transparent)}
+.model-fit-label{display:block;font-size:.78rem;color:var(--muted);margin-top:5px;line-height:1.4}
+.model-toggle{margin-top:16px;min-height:44px;font-size:.92rem}
+.model-notes{margin-top:24px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem;line-height:1.65}
+.model-notes > p{margin:0;color:var(--muted)}
+.model-method{margin-top:14px}
+.model-method summary{color:var(--soft);cursor:pointer;font-weight:500}
+.model-method p{margin:12px 0 0!important;color:var(--muted)!important;font-size:.9rem}
+.model-end-link{margin-top:18px!important}
+.article .model-section{padding:28px 0;margin:28px 0;border-bottom:1px solid var(--line)}
+.model-section .sec-head h2{margin:0}
+.model-section .sec-head p{margin:0;color:var(--muted);font-size:1rem}
+.article .model-section .sec-head{gap:14px;margin-bottom:24px}
+.article .model-section .sec-head p{max-width:none}
+.article .model-explorer{padding:20px}
+.article .model-controls{gap:16px}
+.article .model-controls select{font-size:.86rem}
+.article .model-table{font-size:.86rem}
+.article .model-table th,.article .model-table td{padding:14px 8px}
+.article .model-table th:first-child{padding-left:0}
+.article .model-memory{font-size:.78rem}
+@media (max-width:760px){
+  .model-controls{grid-template-columns:1fr;gap:15px}
+  .model-controls select{font-size:1rem}
+  .model-table,.model-table tbody{display:block;width:100%}
+  .model-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .model-table tr{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;border-top:1px solid var(--line);padding:18px 0}
+  .model-table th,.model-table td,.article .model-table th,.article .model-table td{display:block;border:0;padding:0;min-width:0}
+  .model-table tbody th{grid-column:1 / -1;font-size:1rem}
+  .model-table td:nth-child(2){grid-column:1 / -1}
+  .model-table td::before{content:attr(data-label);display:block;font-family:var(--body);font-size:.75rem;line-height:1.5;color:var(--muted);margin-bottom:5px}
+  .model-memory,.article .model-memory{font-size:.9rem}
+  .model-count{font-size:.86rem}
+  .model-explorer,.article .model-explorer{padding:18px 16px}
+  .model-table th small{font-size:.84rem}
+}

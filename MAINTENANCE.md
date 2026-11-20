@@ -11,6 +11,8 @@ python3 tools/check.py   # must print "All checks passed."
 
 The build regenerates `downloads/memory-study-config.json` and `downloads/memory-study-results.csv` from the same GPU data used by the guide and calculator. It also copies `tools/memory_study.py` into `downloads/`. Keep the study labeled as calculated estimates.
 
+The named model catalog lives in `tools/gpu_models.py`. Verify publisher model cards before changing parameter counts or adding models, and update its review date. GPU capacities are supplied by `GPUS` in the builder. The JavaScript explorer must use the same weight-memory assumptions as the generated fallback.
+
 ## Twice-weekly health check
 1. The latest production deployment in Vercel is `READY`.
 2. These return 200: `https://www.datatalkwithankit.com/`, `/gpu-guide`, `/posts/h200-vs-mi300x`, `/sitemap.xml`, `/llms.txt`.

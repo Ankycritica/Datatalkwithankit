@@ -1,5 +1,6 @@
 import json, os, shutil
 from memory_study import write_results, scenarios
+from gpu_models import model_explorer, MODELS_REVIEWED_ISO, MODELS_REVIEWED_LABEL
 from content import STUDY_TITLE, STUDY_DESC, STUDY_BODY, PIPELINE_TITLE, PIPELINE_DESC, PIPELINE_BODY
 CONTENT_DATE = "2026-11-17"
 OUT = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "datatalkwithankit"))  # site folder Vercel deploys
@@ -98,7 +99,10 @@ GPUS = [  # key, vendor, name, mem GB, memory type, bandwidth TB/s, interconnect
     ("mi355x", "amd", "AMD MI355X",   288, "HBM3e", "8",    "Infinity Fabric",    "ROCm", 5.99),
 ]
 # Newest first. Add an entry whenever prices or GPUs change.
+GUIDE_UPDATED_ISO = max(PRICE_DATE_ISO, MODELS_REVIEWED_ISO)
+GUIDE_UPDATED_LABEL = PRICE_DATE if PRICE_DATE_ISO >= MODELS_REVIEWED_ISO else MODELS_REVIEWED_LABEL
 GUIDE_CHANGELOG = [
+    ("Nov 20, 2026", "Added an AI model explorer with publisher model cards, precision comparisons, and capacity estimates across all seven GPUs."),
     ("Nov 9, 2026", "Prices refreshed: H100 $1.71 → $1.80, B200 $3.75 → $4.11, B300 $4.99 → $5.57, MI300X $2.39 → $1.99."),
     ("Oct 12, 2026", "First version. Covers H100, H200, B200, B300, MI300X, MI325X, and MI355X, with prices from getdeploying.com."),
 ]
@@ -133,7 +137,7 @@ H200_ROW = """<a class="post-row" href="/posts/h200-vs-mi300x" data-tags="gpus c
 """
 
 GUIDE_ROW = """<a class="post-row" href="/gpu-guide" data-tags="gpus cost memory">
-  <span class="when">Updated """ + PRICE_DATE + """</span>
+  <span class="when">Updated """ + GUIDE_UPDATED_LABEL + """</span>
   <div><h3>Which GPU should you rent for LLM inference?</h3><p>H100, H200, B200, B300, MI300X, MI325X and MI355X compared: memory, bandwidth, GPUs per model, and price. Updated every quarter.</p></div>
   <span class="status live">Guide</span>
 </a>
@@ -170,6 +174,7 @@ home += """<main>
       </div>
       <div class="hero-links" aria-label="Explore the site">
         <a href="#fit-section">Capacity calculator <span aria-hidden="true">&rarr;</span></a>
+        <a href="#ai-models">AI models <span aria-hidden="true">&rarr;</span></a>
         <a href="/gpu-guide">GPU guide <span aria-hidden="true">&rarr;</span></a>
         <a href="#projects">Selected projects <span aria-hidden="true">&rarr;</span></a>
       </div>
@@ -226,6 +231,7 @@ home += """<main>
   </div>
 </section>
 
+""" + model_explorer(GPUS) + """
 <section class="section" id="writing" aria-labelledby="writing-title">
   <div class="wrap">
     <div class="sec-head">
@@ -577,7 +583,7 @@ open(os.path.join(OUT, "posts", "h200-vs-mi300x.html"), "w").write(post)
 
 # ======================= GUIDE: which GPU =======================
 import math
-GUIDE_DESC = "How many H100, H200, B200, B300, MI300X, MI325X or MI355X GPUs your LLM needs, how they compare, and what they cost per hour. Updated quarterly."
+GUIDE_DESC = "How many H100, H200, B200, B300, MI300X, MI325X or MI355X GPUs your LLM needs, open-weight AI model examples by GPU, and dated rental-price comparisons."
 SIZES = (8, 32, 70, 123, 405)
 def g_count(need, mem):
     n = max(1, math.ceil(need / mem))
@@ -626,7 +632,7 @@ FAQ_LD = {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [
 FAQ_HTML = "".join(f"<details class=\"faq\"><summary>{q}</summary><p>{a}</p></details>\n" for q, a in FAQ)
 guide_ld = {"@context": "https://schema.org", "@type": "TechArticle",
             "headline": "Which GPU should you rent for LLM inference?",
-            "description": GUIDE_DESC, "datePublished": "2026-10-12", "dateModified": PRICE_DATE_ISO,
+            "description": GUIDE_DESC, "datePublished": "2026-10-12", "dateModified": GUIDE_UPDATED_ISO,
             "author": {"@type": "Person", "name": "Ankit Dongare", "url": SITE},
             "mainEntityOfPage": SITE + "/gpu-guide", "image": SITE + "/og-gpu-guide.png",
             "keywords": "GPU for LLM inference, H100, H200, B200, B300, MI300X, MI325X, MI355X, GPU memory, tensor parallelism, NVLink, GPU rental price"}
@@ -636,7 +642,7 @@ guide += header("GPU guide")
 guide += """<main class="wrap">
 <article class="article wide">
   <a class="crumb" href="/blog">Back to all writing</a>
-  <p class="kicker-line">Living guide &middot; Last updated """ + PRICE_DATE + """</p>
+  <p class="kicker-line">Living guide &middot; Last updated """ + GUIDE_UPDATED_LABEL + """</p>
   <h1>Which GPU should you rent for LLM inference?</h1>
   <div class="byline-row">
     <span class="byline-avatar" aria-hidden="true"><img src="/images/ankit-about.jpg" alt="" width="120" height="150" loading="lazy"></span>
@@ -653,6 +659,7 @@ guide += """<main class="wrap">
       </ol>
     </div>
 
+""" + model_explorer(GPUS, guide=True) + """
     <h2>Step 1: How many GPUs does your model need?</h2>
     <p>Weights take about 2 bytes per parameter at FP16 and about 1 at FP8. On top of that you need room for the KV cache, which grows with batch size and context length. I add 20% headroom as a starting point. Long contexts or big batches need more.</p>
     <p>Counts round up to 1, 2, 4 or 8, because tensor parallelism splits a model evenly across GPUs. Above 8 means more than one 8-GPU node.</p>
@@ -848,6 +855,7 @@ open(os.path.join(OUT, "llms.txt"), "w").write(f"""# DatatalkwithAnkit
 - [Video publishing workflow]({SITE}/projects/video-pipeline): project case study.
 
 ## Tools
+- [AI models by GPU]({SITE}/#ai-models): publisher-sourced open-weight model examples, with GPU and precision filters and estimated memory requirements.
 - [Will-it-fit calculator]({SITE}/#fit-section): GPUs needed and hourly cost for a model size and precision.
 
 ## About
@@ -858,7 +866,7 @@ open(os.path.join(OUT, "robots.txt"), "w").write(f"User-agent: *\nAllow: /\nSite
 urls = [("/posts/llm-memory-capacity", "0.9"), ("/projects/video-pipeline", "0.7"), ("/", "1.0"), ("/gpu-guide", "0.9"), ("/posts/h200-vs-mi300x", "0.9"), ("/blog", "0.8"), ("/papers", "0.7"), ("/uses", "0.5")]
 open(os.path.join(OUT, "sitemap.xml"), "w").write(
     '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' +
-    "".join(f"  <url><loc>{SITE}{u}</loc><lastmod>{PRICE_DATE_ISO if u == '/gpu-guide' else CONTENT_DATE if u in ('/', '/blog', '/papers', '/posts/llm-memory-capacity', '/projects/video-pipeline') else '2026-10-12'}</lastmod><priority>{p}</priority></url>\n" for u, p in urls) +
+    "".join(f"  <url><loc>{SITE}{u}</loc><lastmod>{GUIDE_UPDATED_ISO if u in ('/', '/gpu-guide', '/blog') else CONTENT_DATE if u in ('/papers', '/posts/llm-memory-capacity', '/projects/video-pipeline') else '2026-10-12'}</lastmod><priority>{p}</priority></url>\n" for u, p in urls) +
     "</urlset>\n")
 open(os.path.join(OUT, "rss.xml"), "w").write(f"""<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">

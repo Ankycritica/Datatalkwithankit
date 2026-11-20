@@ -117,6 +117,58 @@
     render();
   }
 
+  /* ---------- named AI models by GPU ---------- */
+  var modelExplorer = document.getElementById('model-explorer');
+  if (modelExplorer) {
+    var modelGpu = document.getElementById('model-gpu');
+    var modelPrecision = document.getElementById('model-precision');
+    var modelToggle = document.getElementById('model-toggle');
+    var modelRows = Array.prototype.slice.call(modelExplorer.querySelectorAll('tbody tr'));
+    var singleOnly = modelExplorer.getAttribute('data-default-expanded') !== 'true';
+    var modelFormats = { '2': '16-bit', '1': 'FP8', '0.5': 'INT4' };
+    var memoryNumber = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1, minimumFractionDigits: 1 });
+
+    function renderModels() {
+      var selectedGpu = modelGpu.options[modelGpu.selectedIndex];
+      var memory = Number(selectedGpu.getAttribute('data-memory'));
+      var bytesPerWeight = Number(modelPrecision.value);
+      var singleCount = 0;
+      modelRows.forEach(function (row) {
+        var needed = Number(row.getAttribute('data-parameters')) * bytesPerWeight * 1.2;
+        var count = 1;
+        while (count * memory < needed) count *= 2;
+        var tight = count === 1 && needed / memory > 0.9;
+        if (count === 1) singleCount++;
+        row.querySelector('.model-memory').textContent = memoryNumber.format(needed) + ' GB';
+        var badge = row.querySelector('.model-count');
+        badge.textContent = count + (count === 1 ? ' GPU' : ' GPUs');
+        badge.className = 'model-count ' + (tight ? 'tight' : count === 1 ? 'single' : 'multi');
+        row.querySelector('.model-fit-label').textContent = tight ? 'Tight budget' : count === 1 ? 'Memory candidate' : 'Multiple GPUs';
+        row.hidden = singleOnly && count > 1;
+      });
+      var gpuName = selectedGpu.textContent.split(' · ')[0];
+      document.getElementById('model-summary').textContent =
+        singleCount + ' of ' + modelRows.length + ' examples fit a single ' + gpuName +
+        ' memory budget at ' + modelFormats[modelPrecision.value] +
+        '. ' + (singleOnly ? 'Showing single-GPU candidates.' : 'Showing all model sizes.');
+      document.getElementById('model-empty').hidden = !singleOnly || singleCount > 0;
+      document.getElementById('model-runtime').textContent =
+        (selectedGpu.getAttribute('data-vendor') === 'amd' ?
+          'AMD: use a ROCm-compatible serving build. ' : 'NVIDIA: use a CUDA-compatible serving build. ') +
+        'Confirm support for this GPU and model' +
+        (bytesPerWeight < 2 ? ', including the quantized checkpoint and kernels. These are memory comparisons.' : ' before deployment. These are capacity estimates.');
+      modelToggle.hidden = false;
+      modelToggle.textContent = singleOnly ? 'Show all ' + modelRows.length + ' models' : 'Show single-GPU candidates';
+      modelToggle.setAttribute('aria-expanded', String(!singleOnly));
+    }
+    modelGpu.disabled = false;
+    modelPrecision.disabled = false;
+    modelGpu.addEventListener('change', renderModels);
+    modelPrecision.addEventListener('change', renderModels);
+    modelToggle.addEventListener('click', function () { singleOnly = !singleOnly; renderModels(); });
+    renderModels();
+  }
+
   /* ---------- guide precision toggle ---------- */
   var gp = document.getElementById('guide-prec');
   if (gp) {

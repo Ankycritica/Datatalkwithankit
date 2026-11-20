@@ -15,6 +15,7 @@
 - [Video publishing workflow](https://www.datatalkwithankit.com/projects/video-pipeline): project case study.
 
 ## Tools
+- [AI models by GPU](https://www.datatalkwithankit.com/#ai-models): publisher-sourced open-weight model examples, with GPU and precision filters and estimated memory requirements.
 - [Will-it-fit calculator](https://www.datatalkwithankit.com/#fit-section): GPUs needed and hourly cost for a model size and precision.
 
 ## About
